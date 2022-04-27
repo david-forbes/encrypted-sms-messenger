@@ -16,6 +16,7 @@
 
 package com.example.smsmessaging;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.example.smsmessaging.SecondActivity.BROADCAST;
 
 import android.annotation.TargetApi;
@@ -183,14 +184,17 @@ public class MySmsReceiver extends BroadcastReceiver  {
                 Toast.makeText(context.getApplicationContext(), message.substring(0,3),Toast.LENGTH_SHORT).show();
                 if(message.substring(0,3).equals("***")){
                     SharedPreferences sharedPref1 =MyApplication.getAppContext().getSharedPreferences(
-                            "com.example.smsmessaging", Context.MODE_PRIVATE);
+                            "public_key", Context.MODE_PRIVATE);
                     sharedPref1.edit().putString(keys[i].toString().replaceAll("[^\\d.]", ""),message.substring(3)).apply();
+
+
+
                     Toast.makeText(MyApplication.getAppContext(),"new encryption key added",Toast.LENGTH_SHORT).show();
                 }
 
 
                 ContentValues values = new ContentValues();
-                //msgs[i] = SmsMessage.createFromPdu((byte[]) pdus[i], format);
+
 
 
                 values.put("address", (keys[i].toString().replaceAll("[^\\d.]", "")));
@@ -199,12 +203,12 @@ public class MySmsReceiver extends BroadcastReceiver  {
 
                 SimpleDateFormat sdf = new SimpleDateFormat("YY/MM/ddHH:mm:ss");
                 String currentTime = sdf.format(new Date());
-                //Toast.makeText(context, msgs[i].getMessageBody(), Toast.LENGTH_SHORT).show();
+
                 values.put("date", currentTime);
 
 
                 Uri uriSMSURI = Uri.parse("content://sms/inbox");
-                //contentResolver.insert(uriSMSURI, values);
+
 
 
                 context.getContentResolver().insert(uriSMSURI, values);

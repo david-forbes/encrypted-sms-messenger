@@ -478,10 +478,15 @@ messages=new LinkedList<>();
 
             }
                 if (togSwitch.isChecked()){
-
+/*
                     SharedPreferences sharedPref =MyApplication.getAppContext().getSharedPreferences(
                             "com.example.smsmessaging", Context.MODE_PRIVATE);
                     String pubKey = sharedPref.getString(phoneString+"PUBLICKEY","");
+
+ */
+                    SharedPreferences sharedPref =MyApplication.getAppContext().getSharedPreferences(
+                            "public_key", MODE_PRIVATE);
+                    String pubKey = sharedPref.getString(phoneString,"");
                     if(pubKey.isEmpty()){
                         Toast.makeText(this,"No saved encryption key for this number",Toast.LENGTH_SHORT).show();
                         return;
