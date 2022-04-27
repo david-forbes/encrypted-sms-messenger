@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorPrimary">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        app:title="@string/app_name"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?android:attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <!--
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:radius="0dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="0dp"
+
+
+        app:layout_constraintBottom_toTopOf="@id/recyclerViewList"
+
+        app:layout_constraintTop_toBottomOf="parent">
+
+
+        <Button
+
+
+            android:id="@+id/buttonOpen"
+            style="@android:style/Widget.Button"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+
+
+            android:background="@color/grayc"
+
+            android:onClick="smsOpenMessage"
+            android:text="OPEN" />
+
+
+
+    </androidx.cardview.widget.CardView>
+-->
+
+
+    <androidx.appcompat.widget.SearchView
+
+        android:textColor="?attr/colorOnPrimary"
+        android:id="@+id/editTextSendMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="-10dp"
+        android:hint="Enter Phone Number"
+        android:inputType="textPersonName|textMultiLine"
+        android:background="?attr/colorPrimary"
+
+
+        android:visibility="visible"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_toolbar"
+        app:layout_constraintVertical_bias="0.0">
+
+    </androidx.appcompat.widget.SearchView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="?attr/colorPrimary"
+        android:elevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextSendMessage">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

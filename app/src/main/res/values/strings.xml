@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Try2sms</string>
+    <string name="send_a_message">send a message</string>
+    <string name="enter_message_here">enter message here</string>
+    <string name="retry">retry</string>
+    <string name="enter_phone">enter phone</string>
+    <string name="permission_not_granted">permission not granted</string>
+    <string name="failure_permission">failure permission</string>
+    <string name="sms_disabled">sms disabled</string>
+    <string name="channel_name">text received</string>
+    <string name="channel_description">channel description</string>
+    <string name="app_label">SmsMessaging</string>
+    <string name="action_settings">action settings</string>
+    <string name="action_favorite">action_favourite</string>
+    <string name="Settings">Settings</string>
+    <string name="individual_settings">Conversation Preferences</string>
+    <string name="View_Contact">View Contact</string>
+</resources>

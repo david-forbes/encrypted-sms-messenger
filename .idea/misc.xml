@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.67" />
+        <entry key="app/src/main/res/layout/activity_main2.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_main_new.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_second.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_setting.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_setting_main.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/card_layout.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/card_layout_backup.xml" value="0.2911500641299701" />
+        <entry key="app/src/main/res/layout/card_layout_main.xml" value="0.3546875" />
+        <entry key="app/src/main/res/layout/newtest.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/searchable.xml" value="0.2911500641299701" />
+        <entry key="app/src/main/res/layout/switch_layout.xml" value="0.2911500641299701" />
+        <entry key="app/src/main/res/menu/bar.xml" value="0.2911500641299701" />
+        <entry key="app/src/main/res/menu/menu.xml" value="0.11214087117701575" />
+        <entry key="app/src/main/res/menu/tog.xml" value="0.2911500641299701" />
+        <entry key="app/src/main/res/xml/searchable.xml" value="0.1569046601111586" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

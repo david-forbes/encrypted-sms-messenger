@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- "Mark Favorite", should appear as action button if possible -->
+
+
+    <!-- Settings, should always be in the overflow -->
+    <item android:id="@+id/action_settings"
+        android:title="@string/Settings"
+        app:showAsAction="never"/>
+    <item android:id="@+id/show_search"
+        android:title="show search"
+        android:icon="@drawable/ic_baseline_search_24"
+        app:showAsAction="always"/>
+
+</menu>
