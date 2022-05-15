@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.security.CryptoPrimitive;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -43,8 +44,9 @@ public class SettingsActivityMain extends AppCompatActivity {
 
     public TextView textView;
     public TextView textView2;
-    private PrivateKey privateKey;
+    private  PrivateKey privateKey;
     private PublicKey publicKey;
+    String TAG = "SettingsActivityMain";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +81,7 @@ public void GenKeypair(){
     KeyPair pair = generator.generateKeyPair();
     privateKey = pair.getPrivate();
     publicKey = pair.getPublic();
+
             ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
             File directory = contextWrapper.getDir(getFilesDir().getName(), Context.MODE_PRIVATE);
             File file =  new File(directory,"public.key");
@@ -97,15 +100,20 @@ public void GenKeypair(){
         fos.close();
         fospriv.close();
             Toast.makeText(getBaseContext(), "fidn", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "PublicKey:"+publicKey);
+            Log.d(TAG, "PrivateKey:"+privateKey.toString());
+            Log.d(TAG, "GenKeypair: "+privateKey);
     } catch (Exception e) {
         e.printStackTrace();
 
     }
 }
 public void GetKeypairView(View v){
-        GetKeypair();
+        publicKey = EncryptionHelper.GetPublicKey();
+        privateKey =EncryptionHelper.GetPrivateKey();
     textView.setText(publicKey.toString());
     textView2.setText(privateKey.toString());}
+    /*
 public void GetKeypair(){
         try {
             ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
@@ -140,6 +148,8 @@ public void GetKeypair(){
 
 }
 
+     */
+/*
 public void GetPublicKey(){
         String d = "";
         try {
@@ -158,4 +168,6 @@ public void GetPublicKey(){
         }catch (Exception e){ Log.d("noneed",e.toString());}
 
     }
+
+ */
 }

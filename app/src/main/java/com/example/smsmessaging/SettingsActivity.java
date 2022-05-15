@@ -181,13 +181,13 @@ String messagecur = messages.remove();
 
     public void smsSendPublic(View view) {
 
-
-        GetPublicKey();
+        publicKey = EncryptionHelper.GetPublicKey();
+        //GetPublicKey();
 
         RSAPublicKey publicKeyRsa = (RSAPublicKey) publicKey;
 
 
-        SmsSplit(phoneString, Base64.getEncoder().encodeToString(publicKeyRsa.getModulus().toByteArray()));
+        SmsSplit(phoneString, "***"+Base64.getEncoder().encodeToString(publicKeyRsa.getEncoded()));
 
 
 
@@ -298,6 +298,7 @@ String messagecur = messages.remove();
         }catch (Exception e){ Log.d("noneed",e.toString());}
 
     }
+    /*
     public void GetKeypair(){
         try {
             ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
@@ -329,6 +330,7 @@ String messagecur = messages.remove();
         }catch(Exception e) {
             Log.d("noneed", e.toString());
         }
-    }}
+    }
+*/}
 
 

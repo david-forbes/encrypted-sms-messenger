@@ -190,6 +190,8 @@ public class MySmsReceiver extends BroadcastReceiver  {
 
 
                     Toast.makeText(MyApplication.getAppContext(),"new encryption key added",Toast.LENGTH_SHORT).show();
+                }else if(message.substring(0,2).equals("**")){
+
                 }
 
 

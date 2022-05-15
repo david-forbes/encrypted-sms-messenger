@@ -55,7 +55,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.android.smsmessaging.R;
 
+import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
+import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
 import java.text.SimpleDateFormat;
@@ -490,8 +492,21 @@ messages=new LinkedList<>();
                     if(pubKey.isEmpty()){
                         Toast.makeText(this,"No saved encryption key for this number",Toast.LENGTH_SHORT).show();
                         return;
+
                     }
-                    SmsSplit(destinationAddress, pubKey);
+                    PublicKey standInPubKey = EncryptionHelper.GetPublicKey();
+                    String standInString = Base64.getEncoder().encodeToString(standInPubKey.getEncoded());
+
+                    PublicKey publicKey = EncryptionHelper.PublicKeyFromString(standInString);
+
+
+
+                    String string = Base64.getDecoder().decode(pubKey).toString();
+                    string = EncryptionHelper.encrypt(publicKey, smsMessage);
+                    PrivateKey privateKey = EncryptionHelper.GetPrivateKey();
+                    Log.d(TAG, "smsSendMessage: privateKey is "+privateKey);
+                    Log.d(TAG, "smsSendMessage: decrypted message is "+EncryptionHelper.decrypt(privateKey,string));
+                    SmsSplit(destinationAddress, string);
                 }else{
                 SmsSplit(destinationAddress, smsMessage);
     }}
