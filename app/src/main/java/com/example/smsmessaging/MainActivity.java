@@ -47,7 +47,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 public class MainActivity extends AppCompatActivity{
-    private static final String TAG = ThirdActivity.class.getSimpleName();
+    private static final String TAG = MainActivity.class.getSimpleName();
     public int color;
     public List<String> phoneNumbers;
     public String phoneNumber;

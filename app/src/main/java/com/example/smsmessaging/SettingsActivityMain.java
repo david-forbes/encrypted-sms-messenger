@@ -76,33 +76,33 @@ public void GenKeypairView(View v){GenKeypair();
 
 public void GenKeypair(){
         try{
-    KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-    generator.initialize(2048);
-    KeyPair pair = generator.generateKeyPair();
-    privateKey = pair.getPrivate();
-    publicKey = pair.getPublic();
+            KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
+            generator.initialize(1024);
+            KeyPair pair = generator.generateKeyPair();
+            privateKey = pair.getPrivate();
+            publicKey = pair.getPublic();
 
-            ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
-            File directory = contextWrapper.getDir(getFilesDir().getName(), Context.MODE_PRIVATE);
+            byte[] message = "hello".getBytes(StandardCharsets.UTF_8);
+            byte[] encrypted = EncryptionHelper.encrypt(publicKey,message);
+            Log.d(TAG, "GenKeypair: "+encrypted);
+            byte[] decrypted = EncryptionHelper.decrypt(privateKey,encrypted);
+            Log.d(TAG, "GenKeypair: "+decrypted);
+
+
+            File directory = MyApplication.getAppContext().getDir(MyApplication.getAppContext().getFilesDir().getName(), Context.MODE_PRIVATE);
+
             File file =  new File(directory,"public.key");
+            FileOutputStream fosPublic = new FileOutputStream(file, false);
+            X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(publicKey.getEncoded());
+            fosPublic.write(publicKey.getEncoded());
+            fosPublic.close();
+
             File file2 =  new File(directory,"private.key");
+            FileOutputStream fosPrivate = new FileOutputStream(file2, false);
+            PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(privateKey.getEncoded());
+            fosPrivate.write(privateKey.getEncoded());
+            fosPrivate.close();
 
-
-
-
-
-        FileOutputStream fos = new FileOutputStream(file, false);
-        fos.write(publicKey.getEncoded());
-
-
-        FileOutputStream fospriv = new FileOutputStream(file2, false);
-            fospriv.write(privateKey.getEncoded());
-        fos.close();
-        fospriv.close();
-            Toast.makeText(getBaseContext(), "fidn", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "PublicKey:"+publicKey);
-            Log.d(TAG, "PrivateKey:"+privateKey.toString());
-            Log.d(TAG, "GenKeypair: "+privateKey);
     } catch (Exception e) {
         e.printStackTrace();
 
@@ -111,63 +111,9 @@ public void GenKeypair(){
 public void GetKeypairView(View v){
         publicKey = EncryptionHelper.GetPublicKey();
         privateKey =EncryptionHelper.GetPrivateKey();
+    Log.d(TAG, "GetKeypairView: "+privateKey);
     textView.setText(publicKey.toString());
-    textView2.setText(privateKey.toString());}
-    /*
-public void GetKeypair(){
-        try {
-            ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
-            File directory = contextWrapper.getDir(getFilesDir().getName(), Context.MODE_PRIVATE);
-
-            File publicKeyFile = new File(directory,"public.key");
-            byte[] publicKeyBytes = Files.readAllBytes(publicKeyFile.toPath());
-
-            File privateKeyFile = new File(directory,"private.key");
-            byte[] privateKeyBytes = Files.readAllBytes(privateKeyFile.toPath());
-
-
-
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-
-            EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);
-
-            publicKey = keyFactory.generatePublic(publicKeySpec);
-
-            EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
-
-            privateKey = keyFactory.generatePrivate(privateKeySpec);
-
-
-
-
-
-            Toast.makeText(getBaseContext(), "fn", Toast.LENGTH_SHORT).show();
-        }catch(Exception e){
-            Log.d("noneed",e.toString());
-        }
-
-}
-
-     */
-/*
-public void GetPublicKey(){
-        String d = "";
-        try {
-            ContextWrapper contextWrapper = new ContextWrapper(MyApplication.getAppContext());
-            File directory = contextWrapper.getDir(getFilesDir().getName(), Context.MODE_PRIVATE);
-
-            File publicKeyFile = new File(directory, "public.key");
-            byte[] publicKeyBytes = Files.readAllBytes(publicKeyFile.toPath());
-
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-
-            EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);
-
-            PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
-
-        }catch (Exception e){ Log.d("noneed",e.toString());}
-
+    textView2.setText(privateKey.toString());
     }
 
- */
 }

@@ -97,9 +97,7 @@ public class RecyclerViewAdapterMain extends RecyclerView.Adapter<RecyclerViewAd
         holder.courseTV.setText(recyclerDataMain.getTitle());
         holder.textView2.setText(recyclerDataMain.getMessage());
         holder.textViewTime.setText(recyclerDataMain.getTime());
-        //holder.courseIV.setImageResource(recyclerData.getFolder());
 
-        //holder.cardViewId.setCardBackgroundColor(recyclerDataMain.getFolder());
 
     }
 

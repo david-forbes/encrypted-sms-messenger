@@ -1,6 +1,6 @@
 package com.example.smsmessaging;
 
-import static com.example.smsmessaging.Convert.comp;
+
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -230,53 +230,6 @@ String messagecur = messages.remove();
         smsManager.sendTextMessage(address.replaceAll("[^\\d.]", ""), null, message,
                 sentPI, null);
 
-/*
-        registerReceiver(new BroadcastReceiver()
-        {
-            @Override
-            public void onReceive(Context context, Intent intent)
-            {
-                switch (getResultCode())
-                {
-                    case Activity.RESULT_OK:
-                        Toast.makeText(getBaseContext(), "SMS sent", Toast.LENGTH_SHORT).show();
-
-
-
-
-                        ContentResolver contentResolver = getBaseContext().getContentResolver();
-                        ContentValues values = new ContentValues();
-                        values.put("body", message);
-                        values.put("address", address.replaceAll("[^\\d.]", ""));
-
-
-                        SimpleDateFormat sdf = new SimpleDateFormat("YY/MM/ddHH:mm:ss");
-
-                        String currentTime = sdf.format(new Date());
-                        values.put("date",currentTime);
-
-                        Uri uriSMSURI = Uri.parse("content://sms/sent");
-                        getBaseContext().getContentResolver().insert(uriSMSURI, values);
-
-                        break;
-                    case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-                        Toast.makeText(getBaseContext(), "Generic failure", Toast.LENGTH_SHORT).show();
-                        break;
-                    case SmsManager.RESULT_ERROR_NO_SERVICE:
-                        Toast.makeText(getBaseContext(), "No service", Toast.LENGTH_SHORT).show();
-                        break;
-                    case SmsManager.RESULT_ERROR_NULL_PDU:
-                        Toast.makeText(getBaseContext(), "Null PDU", Toast.LENGTH_SHORT).show();
-                        break;
-                    case SmsManager.RESULT_ERROR_RADIO_OFF:
-                        Toast.makeText(getBaseContext(), "Radio off", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            }
-
-        }, new IntentFilter(SENT));
-
- */
 
 
     }
@@ -298,39 +251,6 @@ String messagecur = messages.remove();
         }catch (Exception e){ Log.d("noneed",e.toString());}
 
     }
-    /*
-    public void GetKeypair(){
-        try {
-            ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
-            File directory = contextWrapper.getDir(getFilesDir().getName(), Context.MODE_PRIVATE);
-
-            File publicKeyFile = new File(directory,"public.key");
-            byte[] publicKeyBytes = Files.readAllBytes(publicKeyFile.toPath());
-
-            File privateKeyFile = new File(directory,"private.key");
-            byte[] privateKeyBytes = Files.readAllBytes(privateKeyFile.toPath());
-
-
-
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-
-            EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);
-
-            publicKey = keyFactory.generatePublic(publicKeySpec);
-
-            EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
-
-            privateKey = keyFactory.generatePrivate(privateKeySpec);
-
-
-
-
-
-            Toast.makeText(getBaseContext(), "fn", Toast.LENGTH_SHORT).show();
-        }catch(Exception e) {
-            Log.d("noneed", e.toString());
-        }
     }
-*/}
 
 

@@ -32,7 +32,7 @@ public class EncryptionHelper {
 
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 
-            EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);
+            X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);
 
             PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
 
@@ -62,31 +62,30 @@ public class EncryptionHelper {
         }
     }
 
-    public static String encrypt(PublicKey publicKey, String message){
+    public static byte[] encrypt(PublicKey publicKey, byte[] message){
         try {
-
-
+            byte[] messageBytes = message;
+            Log.d("GenKeypair", "encrypt: "+messageBytes);
         Cipher cipher = Cipher.getInstance("RSA");
         cipher.init(Cipher.ENCRYPT_MODE, publicKey);
 
-        byte[] encryptedBytes = cipher.doFinal(message.getBytes(StandardCharsets.UTF_8));
+        byte[] encryptedBytes = cipher.doFinal(message);
 
-        String encryptedMessage = Base64.getEncoder().encodeToString(encryptedBytes);
-        return encryptedMessage;
+
+        return encryptedBytes;
     }
     catch(Exception e){ return null;}
 
     }
-    public static String decrypt(PrivateKey privateKey, String message){
+    public static byte[] decrypt(PrivateKey privateKey, byte[] message){
         try{
-
 
         Cipher cipher = Cipher.getInstance("RSA");
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
 
-        byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(message.getBytes(StandardCharsets.UTF_8)));
+        byte[] decryptedBytes = cipher.doFinal(message);
 
-        return decryptedBytes.toString();
+        return decryptedBytes;
     }catch(Exception e){
             Log.d("EncryptionHelper.decrypt()", "decrypt:"+e);
             return null;
@@ -95,8 +94,8 @@ public class EncryptionHelper {
     public static PrivateKey GetPrivateKey(){
 
         try {
-            ContextWrapper contextWrapper = new ContextWrapper(MyApplication.getAppContext());
-            File directory = contextWrapper.getDir(MyApplication.getAppContext().getFilesDir().getName(), Context.MODE_PRIVATE);
+
+            File directory = MyApplication.getAppContext().getDir(MyApplication.getAppContext().getFilesDir().getName(), Context.MODE_PRIVATE);
 
 
 
@@ -106,7 +105,7 @@ public class EncryptionHelper {
 
             File privateKeyFile = new File(directory,"private.key");
             byte[] privateKeyBytes = Files.readAllBytes(privateKeyFile.toPath());
-            EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
+            PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
             PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
 
 

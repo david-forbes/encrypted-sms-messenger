@@ -502,10 +502,10 @@ messages=new LinkedList<>();
 
 
                     String string = Base64.getDecoder().decode(pubKey).toString();
-                    string = EncryptionHelper.encrypt(publicKey, smsMessage);
+                    //string = EncryptionHelper.encrypt(publicKey, smsMessage);
                     PrivateKey privateKey = EncryptionHelper.GetPrivateKey();
                     Log.d(TAG, "smsSendMessage: privateKey is "+privateKey);
-                    Log.d(TAG, "smsSendMessage: decrypted message is "+EncryptionHelper.decrypt(privateKey,string));
+                    //Log.d(TAG, "smsSendMessage: decrypted message is "+EncryptionHelper.decrypt(privateKey,string));
                     SmsSplit(destinationAddress, string);
                 }else{
                 SmsSplit(destinationAddress, smsMessage);
@@ -622,56 +622,7 @@ messages=new LinkedList<>();
             }
 
 
-/*
-    public List<Sms> getAllSms() {
-        String TAG = "SecondActivity";
-        List<Sms> lstSms = new ArrayList<Sms>();
-        List<String> smsTxt= new ArrayList<String>();
-        Sms objSms = new Sms();
-        Uri message = Uri.parse("content://sms/");
-        ContentResolver cr = this.getContentResolver();
 
-        Cursor c = cr.query(message, null, null, null, null);
-        this.startManagingCursor(c);
-        //int totalSMS = c.getCount();
-
-        if (c.moveToFirst()) {
-            c.moveToPrevious();
-
-            //for (int i = 0; i < totalSMS; i++) {
-            while((c.moveToNext())){
-                objSms = new Sms();
-                objSms.setId(c.getString(c.getColumnIndexOrThrow("_id")));
-                objSms.setAddress(c.getString(c
-                        .getColumnIndexOrThrow("address")));
-                objSms.setMsg(c.getString(c.getColumnIndexOrThrow("body")));
-                objSms.setReadState(c.getString(c.getColumnIndex("read")));
-                objSms.setTime(c.getString(c.getColumnIndexOrThrow("date")));
-                if (c.getString(c.getColumnIndexOrThrow("type")).contains("1")) {
-                    objSms.setFolderName("inbox");
-                } else {
-                    objSms.setFolderName("sent");
-                }
-                //smsTxt.add(c.getString(c.getColumnIndexOrThrow("body")));
-
-
-                lstSms.add(objSms);
-
-            }
-        }
-        // else {
-        // throw new RuntimeException("You have no SMS");
-        // }
-        c.close();
-        for(int i=0;i<lstSms.size();i++){
-            Log.d(TAG, lstSms.get(i).getMsg()+"coe370");
-        }
-
-        Log.d(TAG, lstSms+"code349");
-        //return smsTxt;
-        return lstSms;
-    }
-    */
 
 
             public void onButtonTwoClick (View view){
