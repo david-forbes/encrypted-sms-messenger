@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 for (int i = 0; i < phoneNumbers.size(); i++) {
-                    recyclerDataArrayList.add(new RecyclerDataMain(phoneNumbers.get(i), (ContextCompat.getColor(getBaseContext(), R.color.white)), messages.get(i), time.get(i), null));
+                    recyclerDataArrayList.add(new RecyclerDataMain(phoneNumbers.get(i), (ContextCompat.getColor(getBaseContext(), R.color.white)), messages.get(i), date.get(i), null));
                 }
                 runOnUiThread(new Runnable() {
 
@@ -386,11 +386,13 @@ public class MainActivity extends AppCompatActivity {
 
                     messages.add(c.getString(c.getColumnIndexOrThrow("body")));
 
-                    date.add(c.getString(c.getColumnIndexOrThrow("date")));
+                    //date.add(c.getString(c.getColumnIndexOrThrow("date")));
                     /*
                     cdate = (c.getString(c.getColumnIndexOrThrow("date")));
+
 */
                     messageTime = (c.getString(c.getColumnIndexOrThrow("date")));
+                    date.add(messageTime);
 /*
                     if (cdate.contains(datef)) {
                         time.add(cdate.substring(8, 13));

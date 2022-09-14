@@ -273,9 +273,9 @@ public class ConversationActivity extends AppCompatActivity {
                         values.put("address", destinationAddress.replaceAll("[^\\d.]", ""));
 
 
-                        SimpleDateFormat sdf = new SimpleDateFormat("YY/MM/ddHH:mm:ss");
 
-                        String currentTime = sdf.format(new Date());
+
+                        String currentTime = Long.toString(java.lang.System.currentTimeMillis());
                         values.put("date", currentTime);
 
                         Uri uriSMSURI = Uri.parse("content://sms/sent");
@@ -470,24 +470,26 @@ public class ConversationActivity extends AppCompatActivity {
  */
             SharedPreferences sharedPref = MyApplication.getAppContext().getSharedPreferences(
                     "public_key", MODE_PRIVATE);
+            /*
             String pubKey = sharedPref.getString(phoneString, "");
             if (pubKey.isEmpty()) {
                 Toast.makeText(this, "No saved encryption key for this number", Toast.LENGTH_SHORT).show();
                 return;
 
             }
+
+             */
             PublicKey standInPubKey = EncryptionHelper.GetPublicKey();
-            String standInString = Base64.getEncoder().encodeToString(standInPubKey.getEncoded());
+            String messageString = EncryptionHelper.EncryptFromStringToBase64(standInPubKey, smsMessage);
+            Log.d(TAG, "smsSendMessage: "+EncryptionHelper.DecryptFromBase64ToString(messageString));
 
-            PublicKey publicKey = EncryptionHelper.PublicKeyFromString(standInString);
 
 
-            String string = Base64.getDecoder().decode(pubKey).toString();
-            //string = EncryptionHelper.encrypt(publicKey, smsMessage);
-            PrivateKey privateKey = EncryptionHelper.GetPrivateKey();
-            Log.d(TAG, "smsSendMessage: privateKey is " + privateKey);
-            //Log.d(TAG, "smsSendMessage: decrypted message is "+EncryptionHelper.decrypt(privateKey,string));
-            SmsSplit(destinationAddress, string);
+
+
+
+
+            SmsSplit(destinationAddress, messageString);
         } else {
             SmsSplit(destinationAddress, smsMessage);
         }

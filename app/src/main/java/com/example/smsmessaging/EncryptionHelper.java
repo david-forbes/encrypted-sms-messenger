@@ -48,6 +48,46 @@ public class EncryptionHelper {
 
     }
 
+    public static String GetBase64PublicKey() {
+        try {
+            ContextWrapper contextWrapper = new ContextWrapper(MyApplication.getAppContext());
+            File directory = contextWrapper.getDir(MyApplication.getAppContext().getFilesDir().getName(), Context.MODE_PRIVATE);
+
+            File publicKeyFile = new File(directory, "public.key");
+
+            byte[] publicKeyBytes = Files.readAllBytes(publicKeyFile.toPath());
+
+            String publicKey = new String(Base64.getEncoder().encode(publicKeyBytes), StandardCharsets.UTF_8);
+
+
+            return publicKey;
+
+
+        } catch (Exception e) {
+
+            return null;
+        }
+
+    }
+
+    public static PublicKey GetPublicKeyFromBase64(String publicKeyBase64) {
+        try {
+            byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyBase64.getBytes(StandardCharsets.UTF_8));
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+
+            X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);
+
+            PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
+
+
+            return publicKey;
+
+        } catch (Exception e) {
+
+            return null;
+        }
+    }
+
     public static PublicKey PublicKeyFromString(String publicKeyString) {
 
         byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyString);
@@ -79,6 +119,37 @@ public class EncryptionHelper {
         }
 
     }
+    public static String EncryptFromStringToBase64(PublicKey publicKey, String message){
+        byte[] encryptedMessage = EncryptFromString(publicKey, message);
+
+        byte[] base64EncryptedMessage =  Base64.getEncoder().encode(encryptedMessage);
+        return new String(base64EncryptedMessage, StandardCharsets.UTF_8);
+
+    }
+    public static String DecryptFromBase64ToString(String message){
+        PrivateKey privateKey = GetPrivateKey();
+        try {
+            byte[] messageBytes = Base64.getDecoder().decode(message.getBytes(StandardCharsets.UTF_8));
+            String decryptedMessage = decryptToString(privateKey, messageBytes);
+            return decryptedMessage;
+
+
+
+
+
+
+
+        } catch (Exception e) {
+
+            return null;
+        }
+
+    }
+
+    public static byte[] EncryptFromString(PublicKey publicKey, String message) {
+        byte[] encrypted = encrypt(publicKey, message.getBytes(StandardCharsets.UTF_8));
+        return encrypted;
+    }
 
     public static byte[] decrypt(PrivateKey privateKey, byte[] message) {
         try {
@@ -95,11 +166,18 @@ public class EncryptionHelper {
         }
     }
 
+    public static String decryptToString(PrivateKey privateKey, byte[] message) {
+        byte[] bytes = decrypt(privateKey, message);
+        String decryptedString = new String(bytes, StandardCharsets.UTF_8);
+        return decryptedString;
+    }
+
     public static PrivateKey GetPrivateKey() {
 
         try {
 
-            File directory = MyApplication.getAppContext().getDir(MyApplication.getAppContext().getFilesDir().getName(), Context.MODE_PRIVATE);
+            ContextWrapper contextWrapper = new ContextWrapper(MyApplication.getAppContext());
+            File directory = contextWrapper.getDir(MyApplication.getAppContext().getFilesDir().getName(), Context.MODE_PRIVATE);
 
 
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");

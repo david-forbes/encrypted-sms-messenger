@@ -1,6 +1,8 @@
 package com.example.smsmessaging;
 
 
+import static com.example.smsmessaging.EncryptionHelper.GetPublicKeyFromBase64;
+
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -87,9 +89,8 @@ public class ConversationPreferencesActivity extends AppCompatActivity {
                         values.put("address", address.replaceAll("[^\\d.]", ""));
 
 
-                        SimpleDateFormat sdf = new SimpleDateFormat("YY/MM/ddHH:mm:ss");
 
-                        String currentTime = sdf.format(new Date());
+                        String currentTime = Long.toString(java.lang.System.currentTimeMillis());
                         values.put("date", currentTime);
 
                         Uri uriSMSURI = Uri.parse("content://sms/sent");
@@ -161,17 +162,19 @@ public class ConversationPreferencesActivity extends AppCompatActivity {
 
         //get public key from file
 
-        publicKey = EncryptionHelper.GetPublicKey();
+        String publicKeyString = EncryptionHelper.GetBase64PublicKey();
 
 
 
         //construct public key object from public key
 
-        RSAPublicKey publicKeyRsa = (RSAPublicKey) publicKey;
+        //RSAPublicKey publicKeyRsa = (RSAPublicKey) publicKey;
 
         //Send rsa public key over sms(base64 encoded)
+        Log.d(TAG, "smsSendPublic: "+publicKeyString);
+        Log.d(TAG, "smsSendPublic: "+GetPublicKeyFromBase64(publicKeyString));
 
-        SmsSplit(phoneString, "***" + Base64.getEncoder().encodeToString(publicKeyRsa.getEncoded()));
+        SmsSplit(phoneString, "***" + publicKeyString);
 
 
     }

@@ -1,14 +1,11 @@
 package com.example.smsmessaging;
 
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,27 +14,16 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.android.smsmessaging.R;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.security.CryptoPrimitive;
-import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
-import java.security.KeyStore;
-import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.spec.EncodedKeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
 
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
+import javax.crypto.Cipher;
 
 public class SettingsActivityMain extends AppCompatActivity {
     String phoneString;
@@ -84,12 +70,31 @@ public class SettingsActivityMain extends AppCompatActivity {
             privateKey = pair.getPrivate();
             publicKey = pair.getPublic();
 
-            byte[] message = "hello".getBytes(StandardCharsets.UTF_8);
-            byte[] encrypted = EncryptionHelper.encrypt(publicKey, message);
-            Log.d(TAG, "GenKeypair: " + encrypted);
-            byte[] decrypted = EncryptionHelper.decrypt(privateKey, encrypted);
-            Log.d(TAG, "GenKeypair: " + decrypted);
 
+            byte[] encrypted = EncryptionHelper.EncryptFromString(publicKey, "hello");
+
+            Log.d(TAG, "GenKeypair: " + encrypted);
+            String decryptedString = EncryptionHelper.decryptToString(privateKey, encrypted);
+
+            Log.d(TAG, "GenKeypair: " + decryptedString);
+
+            String secretMessage = "Baeldung secret message";
+
+            Cipher encryptCipher = Cipher.getInstance("RSA");
+            encryptCipher.init(Cipher.ENCRYPT_MODE, publicKey);
+
+            byte[] secretMessageBytes = secretMessage.getBytes(StandardCharsets.UTF_8);
+            byte[] encryptedMessageBytes = encryptCipher.doFinal(secretMessageBytes);
+
+
+
+            Cipher decryptCipher = Cipher.getInstance("RSA");
+            decryptCipher.init(Cipher.DECRYPT_MODE, privateKey);
+
+
+            byte[] decryptedMessageBytes = decryptCipher.doFinal(encryptedMessageBytes);
+            String decryptedMessage = new String(decryptedMessageBytes, StandardCharsets.UTF_8);
+            Log.d(TAG, "GenKeypair: "+decryptedMessage);
 
             File directory = MyApplication.getAppContext().getDir(MyApplication.getAppContext().getFilesDir().getName(), Context.MODE_PRIVATE);
 
@@ -112,8 +117,18 @@ public class SettingsActivityMain extends AppCompatActivity {
     }
 
     public void GetKeypairView(View v) {
+
         publicKey = EncryptionHelper.GetPublicKey();
         privateKey = EncryptionHelper.GetPrivateKey();
+
+        byte[] encrypted = EncryptionHelper.EncryptFromString(publicKey, "hello");
+
+
+        String decryptedString = EncryptionHelper.decryptToString(privateKey, encrypted);
+
+        Log.d(TAG, "GetKeypair: " + decryptedString);
+
+
         Log.d(TAG, "GetKeypairView: " + privateKey);
         textView.setText(publicKey.toString());
         textView2.setText(privateKey.toString());

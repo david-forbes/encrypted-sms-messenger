@@ -174,7 +174,7 @@ public class MySmsReceiver extends BroadcastReceiver {
                 if (message.substring(0, 3).equals("***")) {
                     SharedPreferences sharedPref1 = MyApplication.getAppContext().getSharedPreferences(
                             "public_key", Context.MODE_PRIVATE);
-                    sharedPref1.edit().putString(Base64.getDecoder().decode(keys[i].toString().replaceAll("[^\\d.]", "")).toString(), message.substring(3)).apply();
+                    sharedPref1.edit().putString(keys[i].toString().replaceAll("[^\\d.]", ""), message.substring(3)).apply();
 
 
                     Toast.makeText(MyApplication.getAppContext(), "new encryption key added", Toast.LENGTH_SHORT).show();
