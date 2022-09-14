@@ -27,11 +27,10 @@ public class RecyclerViewAdapterMain extends RecyclerView.Adapter<RecyclerViewAd
     private static ClickListener clickListener;
 
 
-
     public RecyclerViewAdapterMain(ArrayList<RecyclerDataMain> recyclerDataArrayList, Context mcontext) {
         Log.d("once", "RecyclerViewAdapterMain: ");
         this.courseDataArrayList = recyclerDataArrayList;
-        this.courseDataArrayListCopy= (ArrayList<RecyclerDataMain>) recyclerDataArrayList.clone();
+        this.courseDataArrayListCopy = (ArrayList<RecyclerDataMain>) recyclerDataArrayList.clone();
 
 
         this.mcontext = mcontext;
@@ -47,45 +46,48 @@ public class RecyclerViewAdapterMain extends RecyclerView.Adapter<RecyclerViewAd
         return new RecyclerViewHolder(view);
 
     }
+
     public void notifyYourItemInserted(int i) {
         //... your custom logic
         notifyItemInserted(i);
 
     }
+
     public void notifyYourItemRemoved(int i) {
         //... your custom logic
         notifyItemRemoved(i);
     }
+
     public void notifyYourDataSetChanged(ArrayList<RecyclerDataMain> recyclerDataArrayList) {
         courseDataArrayListCopy = (ArrayList<RecyclerDataMain>) recyclerDataArrayList.clone();
         notifyDataSetChanged();
     }
-    public void updateCopy(ArrayList<RecyclerDataMain> recyclerDataArrayList){
-        this.courseDataArrayListCopy= (ArrayList<RecyclerDataMain>) recyclerDataArrayList.clone();
+
+    public void updateCopy(ArrayList<RecyclerDataMain> recyclerDataArrayList) {
+        this.courseDataArrayListCopy = (ArrayList<RecyclerDataMain>) recyclerDataArrayList.clone();
     }
+
     public void filter(String text) {
 
 
-
-
         courseDataArrayList.clear();
-        if(text.equals("")){
+        if (text.equals("")) {
             if (!courseDataArrayListCopy.isEmpty()) {
                 courseDataArrayList.addAll(courseDataArrayListCopy);
             }
             notifyDataSetChanged();
-        } else{
+        } else {
             text = text.toLowerCase();
-            for(int i = 0;i<courseDataArrayListCopy.size();i++){
+            for (int i = 0; i < courseDataArrayListCopy.size(); i++) {
                 RecyclerDataMain item = courseDataArrayListCopy.get(i);
 
-                if(item.getTitle().toString().toLowerCase().contains(text) || item.getMessage().toString().toLowerCase().contains(text)){
+                if (item.getTitle().toString().toLowerCase().contains(text) || item.getMessage().toString().toLowerCase().contains(text)) {
 
                     courseDataArrayList.add(item);
                 }
             }
         }
-        
+
         //Toast.makeText(mcontext, item.getTitle(),Toast.LENGTH_SHORT).show();
         notifyDataSetChanged();
     }
@@ -107,15 +109,14 @@ public class RecyclerViewAdapterMain extends RecyclerView.Adapter<RecyclerViewAd
         // this method returns the size of recyclerview
         return courseDataArrayList.size();
     }
-    
+
     // View Holder Class to handle Recycler View.
-    public static class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
+    public static class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         private TextView courseTV;
         private CardView cardViewId;
         private TextView textView2;
         private TextView textViewTime;
-
 
 
         public RecyclerViewHolder(@NonNull View itemView) {
@@ -126,7 +127,7 @@ public class RecyclerViewAdapterMain extends RecyclerView.Adapter<RecyclerViewAd
             courseTV = itemView.findViewById(R.id.idTVCourse);
             cardViewId = itemView.findViewById(R.id.cardViewId);
             textView2 = itemView.findViewById(R.id.textViewSecond);
-            textViewTime=itemView.findViewById(R.id.textViewTime);
+            textViewTime = itemView.findViewById(R.id.textViewTime);
         }
 
         public void onClick(View v) {
@@ -137,17 +138,20 @@ public class RecyclerViewAdapterMain extends RecyclerView.Adapter<RecyclerViewAd
 
 
         public boolean onLongClick(View v) {
-            clickListener.onItemLongClick(getAdapterPosition(),v);
+            clickListener.onItemLongClick(getAdapterPosition(), v);
             return false;
 
 
-
-}}
-        public void setOnItemClickListener(ClickListener clickListener) {
-            RecyclerViewAdapterMain.clickListener = clickListener;
-        }
-        public interface ClickListener {
-            void onItemClick(int position, View v);
-            void onItemLongClick(int position, View v);
         }
     }
+
+    public void setOnItemClickListener(ClickListener clickListener) {
+        RecyclerViewAdapterMain.clickListener = clickListener;
+    }
+
+    public interface ClickListener {
+        void onItemClick(int position, View v);
+
+        void onItemLongClick(int position, View v);
+    }
+}

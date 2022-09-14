@@ -58,7 +58,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-public class MySmsReceiver extends BroadcastReceiver  {
+public class MySmsReceiver extends BroadcastReceiver {
     private static final String TAG = MySmsReceiver.class.getSimpleName();
     public static final String pdu_type = "pdus";
 
@@ -69,9 +69,11 @@ public class MySmsReceiver extends BroadcastReceiver  {
     public void setMessageText(List<String> messageText) {
         this.messageText = messageText;
     }
+
     public String CHANNEL_ID;
     public List<String> messageText = null;
     public List<String> phoneNumber;
+
     public void createNotificationChannel(Context context) {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
@@ -87,6 +89,7 @@ public class MySmsReceiver extends BroadcastReceiver  {
             notificationManager.createNotificationChannel(channel);
         }
     }
+
     /**
      * Called when the BroadcastReceiver is receiving an Intent broadcast.
      *
@@ -154,49 +157,46 @@ public class MySmsReceiver extends BroadcastReceiver  {
 
             msgs = new SmsMessage[pdus.length];
             for (int i = 0; i < msgs.length; i++) {
-                
+
                 msgs[i] = SmsMessage.createFromPdu((byte[]) pdus[i], format);
                 Log.d(TAG, msgs[i].getOriginatingAddress());
-                if(hashMap.containsKey(msgs[i].getOriginatingAddress().toString())){
+                if (hashMap.containsKey(msgs[i].getOriginatingAddress().toString())) {
                     hashMap.get(msgs[i].getOriginatingAddress()).add(msgs[i]);
                     Log.d(TAG, "success");
-                }else{
+                } else {
                     List<SmsMessage> smsList;
-                    smsList=new ArrayList<SmsMessage>();
+                    smsList = new ArrayList<SmsMessage>();
                     smsList.add(msgs[i]);
-                    hashMap.put(msgs[i].getOriginatingAddress().toString(),smsList);
+                    hashMap.put(msgs[i].getOriginatingAddress().toString(), smsList);
 
                 }
 
             }
-            Log.d(TAG, "onReceive: "+hashMap);
+            Log.d(TAG, "onReceive: " + hashMap);
 
             Object[] keys = hashMap.keySet().toArray();
-            for(int i =0;i<keys.length;i++){
+            for (int i = 0; i < keys.length; i++) {
 
 
-
-            String message="";
-                for(int j=0;j<hashMap.get(keys[i].toString()).size();j++){
-                    message=message+hashMap.get(keys[i].toString()).get(j).getMessageBody();
-                    Log.d(TAG, "onReceive: "+message);
+                String message = "";
+                for (int j = 0; j < hashMap.get(keys[i].toString()).size(); j++) {
+                    message = message + hashMap.get(keys[i].toString()).get(j).getMessageBody();
+                    Log.d(TAG, "onReceive: " + message);
                 }
-                Toast.makeText(context.getApplicationContext(), message.substring(0,3),Toast.LENGTH_SHORT).show();
-                if(message.substring(0,3).equals("***")){
-                    SharedPreferences sharedPref1 =MyApplication.getAppContext().getSharedPreferences(
+                Toast.makeText(context.getApplicationContext(), message.substring(0, 3), Toast.LENGTH_SHORT).show();
+                if (message.substring(0, 3).equals("***")) {
+                    SharedPreferences sharedPref1 = MyApplication.getAppContext().getSharedPreferences(
                             "public_key", Context.MODE_PRIVATE);
-                    sharedPref1.edit().putString(keys[i].toString().replaceAll("[^\\d.]", ""),message.substring(3)).apply();
+                    sharedPref1.edit().putString(keys[i].toString().replaceAll("[^\\d.]", ""), message.substring(3)).apply();
 
 
-
-                    Toast.makeText(MyApplication.getAppContext(),"new encryption key added",Toast.LENGTH_SHORT).show();
-                }else if(message.substring(0,2).equals("**")){
+                    Toast.makeText(MyApplication.getAppContext(), "new encryption key added", Toast.LENGTH_SHORT).show();
+                } else if (message.substring(0, 2).equals("**")) {
 
                 }
 
 
                 ContentValues values = new ContentValues();
-
 
 
                 values.put("address", (keys[i].toString().replaceAll("[^\\d.]", "")));
@@ -210,7 +210,6 @@ public class MySmsReceiver extends BroadcastReceiver  {
 
 
                 Uri uriSMSURI = Uri.parse("content://sms/inbox");
-
 
 
                 context.getContentResolver().insert(uriSMSURI, values);
@@ -244,16 +243,16 @@ public class MySmsReceiver extends BroadcastReceiver  {
                 //Toast.makeText(context, strMessage, Toast.LENGTH_LONG).show();
                 Intent intent2 = new Intent();
                 intent2.setAction("newsms");
-                intent2.putExtra("phoneNumber",keys[i].toString().replaceAll("[^\\d.]", ""));
+                intent2.putExtra("phoneNumber", keys[i].toString().replaceAll("[^\\d.]", ""));
                 intent2.putExtra("message", message);
                 intent2.putExtra("date", currentTime);
                 context.sendBroadcast(intent2);
             }
 
 
-
         }
 
-}}
+    }
+}
 
 

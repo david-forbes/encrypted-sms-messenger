@@ -62,48 +62,48 @@ public class EncryptionHelper {
         }
     }
 
-    public static byte[] encrypt(PublicKey publicKey, byte[] message){
+    public static byte[] encrypt(PublicKey publicKey, byte[] message) {
         try {
             byte[] messageBytes = message;
-            Log.d("GenKeypair", "encrypt: "+messageBytes);
-        Cipher cipher = Cipher.getInstance("RSA");
-        cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+            Log.d("GenKeypair", "encrypt: " + messageBytes);
+            Cipher cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
 
-        byte[] encryptedBytes = cipher.doFinal(message);
+            byte[] encryptedBytes = cipher.doFinal(message);
 
 
-        return encryptedBytes;
+            return encryptedBytes;
+        } catch (Exception e) {
+            return null;
+        }
+
     }
-    catch(Exception e){ return null;}
 
-    }
-    public static byte[] decrypt(PrivateKey privateKey, byte[] message){
-        try{
+    public static byte[] decrypt(PrivateKey privateKey, byte[] message) {
+        try {
 
-        Cipher cipher = Cipher.getInstance("RSA");
-        cipher.init(Cipher.DECRYPT_MODE, privateKey);
+            Cipher cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.DECRYPT_MODE, privateKey);
 
-        byte[] decryptedBytes = cipher.doFinal(message);
+            byte[] decryptedBytes = cipher.doFinal(message);
 
-        return decryptedBytes;
-    }catch(Exception e){
-            Log.d("EncryptionHelper.decrypt()", "decrypt:"+e);
+            return decryptedBytes;
+        } catch (Exception e) {
+            Log.d("EncryptionHelper.decrypt()", "decrypt:" + e);
             return null;
         }
     }
-    public static PrivateKey GetPrivateKey(){
+
+    public static PrivateKey GetPrivateKey() {
 
         try {
 
             File directory = MyApplication.getAppContext().getDir(MyApplication.getAppContext().getFilesDir().getName(), Context.MODE_PRIVATE);
 
 
-
-
-
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 
-            File privateKeyFile = new File(directory,"private.key");
+            File privateKeyFile = new File(directory, "private.key");
             byte[] privateKeyBytes = Files.readAllBytes(privateKeyFile.toPath());
             PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
             PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
@@ -118,7 +118,7 @@ public class EncryptionHelper {
         }
 
     }
-    }
+}
 
 
 

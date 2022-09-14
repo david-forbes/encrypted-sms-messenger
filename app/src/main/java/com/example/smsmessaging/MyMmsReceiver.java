@@ -24,7 +24,7 @@ import android.widget.Toast;
  * </ul>
  */
 public class MyMmsReceiver extends BroadcastReceiver {
-    private static final String TAG =MyMmsReceiver.class.getSimpleName();
+    private static final String TAG = MyMmsReceiver.class.getSimpleName();
     private static ConnectivityManager mConnMgr = null;
 
 
@@ -50,7 +50,7 @@ public class MyMmsReceiver extends BroadcastReceiver {
             Log.d("TAG", "---> MMS | header: " + header.toString());
             Log.d("TAG", "---> MMS | data: " + data.toString());
 
-        } catch(Exception e){
+        } catch (Exception e) {
             Log.d(TAG, "---> ERROR EXTRACTING MMS: " + e.getLocalizedMessage());
         }
     }

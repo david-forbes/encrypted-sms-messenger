@@ -1,6 +1,6 @@
 package com.example.smsmessaging;
 
-public class Sms{
+public class Sms {
 
 
     private String _id;
@@ -10,42 +10,52 @@ public class Sms{
     private String _time;
     private String _folderName;
 
-    public String getId(){
+    public String getId() {
         return _id;
     }
-    public String getAddress(){
+
+    public String getAddress() {
         return _address;
     }
-    public String getMsg(){
+
+    public String getMsg() {
         return _msg;
     }
-    public String getReadState(){
+
+    public String getReadState() {
         return _readState;
     }
-    public String getTime(){
+
+    public String getTime() {
         return _time;
     }
-    public String getFolderName(){
+
+    public String getFolderName() {
         return _folderName;
     }
 
 
-    public void setId(String id){
+    public void setId(String id) {
         _id = id;
     }
-    public void setAddress(String address){
+
+    public void setAddress(String address) {
         _address = address;
     }
-    public void setMsg(String msg){
+
+    public void setMsg(String msg) {
         _msg = msg;
     }
-    public void setReadState(String readState){
+
+    public void setReadState(String readState) {
         _readState = readState;
     }
-    public void setTime(String time){
+
+    public void setTime(String time) {
         _time = time;
     }
-    public void setFolderName(String folderName){
+
+    public void setFolderName(String folderName) {
         _folderName = folderName;
     }
 

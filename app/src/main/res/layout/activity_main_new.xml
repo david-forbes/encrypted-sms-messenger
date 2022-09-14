@@ -8,7 +8,6 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/my_toolbar"
-        app:title="@string/app_name"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?android:attr/colorPrimary"
@@ -19,7 +18,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="@string/app_name" />
 
     <!--
     <androidx.cardview.widget.CardView
@@ -59,14 +59,14 @@
 
     <androidx.appcompat.widget.SearchView
 
-        android:textColor="?attr/colorOnPrimary"
         android:id="@+id/editTextSendMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
         android:elevation="-10dp"
         android:hint="Enter Phone Number"
         android:inputType="textPersonName|textMultiLine"
-        android:background="?attr/colorPrimary"
+        android:textColor="?attr/colorOnPrimary"
 
 
         android:visibility="visible"

@@ -3,8 +3,6 @@ package com.example.smsmessaging;
 public class RecyclerData {
 
 
-
-
     private String title;
     private int folder;
     private String date;
@@ -27,14 +25,6 @@ public class RecyclerData {
     }
 
 
-
-
-
-
-
-
-
-
     public String getTitle() {
         return title;
     }
@@ -51,7 +41,7 @@ public class RecyclerData {
         this.folder = folder;
     }
 
-    public RecyclerData(String title, int folder,String date, int image) {
+    public RecyclerData(String title, int folder, String date, int image) {
         this.title = title;
         this.image = image;
         this.folder = folder;

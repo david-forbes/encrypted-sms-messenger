@@ -44,7 +44,7 @@ public class SettingsActivityMain extends AppCompatActivity {
 
     public TextView textView;
     public TextView textView2;
-    private  PrivateKey privateKey;
+    private PrivateKey privateKey;
     private PublicKey publicKey;
     String TAG = "SettingsActivityMain";
 
@@ -70,12 +70,14 @@ public class SettingsActivityMain extends AppCompatActivity {
 
     }
 
-public void GenKeypairView(View v){GenKeypair();
-    textView.setText(publicKey.toString());
-    textView2.setText(privateKey.toString());}
+    public void GenKeypairView(View v) {
+        GenKeypair();
+        textView.setText(publicKey.toString());
+        textView2.setText(privateKey.toString());
+    }
 
-public void GenKeypair(){
-        try{
+    public void GenKeypair() {
+        try {
             KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
             generator.initialize(1024);
             KeyPair pair = generator.generateKeyPair();
@@ -83,37 +85,38 @@ public void GenKeypair(){
             publicKey = pair.getPublic();
 
             byte[] message = "hello".getBytes(StandardCharsets.UTF_8);
-            byte[] encrypted = EncryptionHelper.encrypt(publicKey,message);
-            Log.d(TAG, "GenKeypair: "+encrypted);
-            byte[] decrypted = EncryptionHelper.decrypt(privateKey,encrypted);
-            Log.d(TAG, "GenKeypair: "+decrypted);
+            byte[] encrypted = EncryptionHelper.encrypt(publicKey, message);
+            Log.d(TAG, "GenKeypair: " + encrypted);
+            byte[] decrypted = EncryptionHelper.decrypt(privateKey, encrypted);
+            Log.d(TAG, "GenKeypair: " + decrypted);
 
 
             File directory = MyApplication.getAppContext().getDir(MyApplication.getAppContext().getFilesDir().getName(), Context.MODE_PRIVATE);
 
-            File file =  new File(directory,"public.key");
+            File file = new File(directory, "public.key");
             FileOutputStream fosPublic = new FileOutputStream(file, false);
             X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(publicKey.getEncoded());
             fosPublic.write(publicKey.getEncoded());
             fosPublic.close();
 
-            File file2 =  new File(directory,"private.key");
+            File file2 = new File(directory, "private.key");
             FileOutputStream fosPrivate = new FileOutputStream(file2, false);
             PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(privateKey.getEncoded());
             fosPrivate.write(privateKey.getEncoded());
             fosPrivate.close();
 
-    } catch (Exception e) {
-        e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
 
+        }
     }
-}
-public void GetKeypairView(View v){
+
+    public void GetKeypairView(View v) {
         publicKey = EncryptionHelper.GetPublicKey();
-        privateKey =EncryptionHelper.GetPrivateKey();
-    Log.d(TAG, "GetKeypairView: "+privateKey);
-    textView.setText(publicKey.toString());
-    textView2.setText(privateKey.toString());
+        privateKey = EncryptionHelper.GetPrivateKey();
+        Log.d(TAG, "GetKeypairView: " + privateKey);
+        textView.setText(publicKey.toString());
+        textView2.setText(privateKey.toString());
     }
 
 }

@@ -38,15 +38,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import android.app.SearchManager;
+
 import androidx.appcompat.widget.SearchView;
+
 import android.widget.SearchView.OnQueryTextListener;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     public int color;
     public List<String> phoneNumbers;
@@ -62,9 +65,7 @@ public class MainActivity extends AppCompatActivity{
     public String datef;
     private String cdate;
     public SearchView searchView;
-    public int requestCode ;
-
-
+    public int requestCode;
 
 
     @Override
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity{
         setSupportActionBar(myToolbar);
         Log.d(TAG, "onCreate: help");
         Intent intent = getIntent();
-        searchView=findViewById(R.id.editTextSendMessage);
+        searchView = findViewById(R.id.editTextSendMessage);
         searchView.setVisibility(View.GONE);
         searchView.setIconifiedByDefault(false);
         recyclerView = findViewById(R.id.recyclerViewList);
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity{
         messages = new ArrayList<>();
         date = new ArrayList<>();
         time = new ArrayList<>();
-        color = (ContextCompat.getColor(this,R.color.white));
+        color = (ContextCompat.getColor(this, R.color.white));
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd");
         datef = sdf.format(new Date());
 
@@ -93,9 +94,9 @@ public class MainActivity extends AppCompatActivity{
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
-        requestCode=82347;
+        requestCode = 82347;
 
-        Thread thread = new Thread(new Runnable(){
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
 
@@ -103,9 +104,9 @@ public class MainActivity extends AppCompatActivity{
                 phoneNumbers = getNumbers();
 
 
-        for(int i=0;i< phoneNumbers.size();i++) {
-            recyclerDataArrayList.add(new RecyclerDataMain(phoneNumbers.get(i), (ContextCompat.getColor(getBaseContext(), R.color.white)), messages.get(i), time.get(i), null));
-        }
+                for (int i = 0; i < phoneNumbers.size(); i++) {
+                    recyclerDataArrayList.add(new RecyclerDataMain(phoneNumbers.get(i), (ContextCompat.getColor(getBaseContext(), R.color.white)), messages.get(i), time.get(i), null));
+                }
                 runOnUiThread(new Runnable() {
 
                     @Override
@@ -116,26 +117,25 @@ public class MainActivity extends AppCompatActivity{
 
                     }
                 });
-        }
+            }
         });
 
         Log.d(TAG, recyclerDataArrayList.toString());
-        if (isDefaultSmsApp(getBaseContext())){
+        if (isDefaultSmsApp(getBaseContext())) {
             //Toast.makeText(this, "h", Toast.LENGTH_SHORT).show();
             thread.start();
 
-        }
-        else{
+        } else {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
                 RoleManager roleManager = getBaseContext().getSystemService(RoleManager.class);
                 // check if the app is having permission to be as default SMS app
                 boolean isRoleAvailable = roleManager.isRoleAvailable(RoleManager.ROLE_SMS);
-                if (isRoleAvailable){
+                if (isRoleAvailable) {
                     // check whether your app is already holding the default SMS app role.
                     boolean isRoleHeld = roleManager.isRoleHeld(RoleManager.ROLE_SMS);
-                    if (!isRoleHeld){
+                    if (!isRoleHeld) {
                         Intent roleRequestIntent = roleManager.createRequestRoleIntent(RoleManager.ROLE_SMS);
-                        startActivityForResult(roleRequestIntent,requestCode);
+                        startActivityForResult(roleRequestIntent, requestCode);
                     }
                 }
             } else {
@@ -148,20 +148,16 @@ public class MainActivity extends AppCompatActivity{
         }
 
 
-
-
-
-
         adapter.setOnItemClickListener(new RecyclerViewAdapterMain.ClickListener() {
 
 
             @Override
-            public void onItemClick(int position,View v){
+            public void onItemClick(int position, View v) {
 
                 Log.d(TAG, "Button clicked");
-                phoneNumber=recyclerDataArrayList.get(position).getTitle();
+                phoneNumber = recyclerDataArrayList.get(position).getTitle();
                 Intent intent = new Intent(v.getContext(), com.example.smsmessaging.SecondActivity.class);
-                intent.putExtra("phoneNumber",phoneNumber);
+                intent.putExtra("phoneNumber", phoneNumber);
                 startActivity(intent);
 
             }
@@ -174,33 +170,33 @@ public class MainActivity extends AppCompatActivity{
                 builder1.setCancelable(true);
 
                 builder1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                adapter.notifyYourItemRemoved(position);
-                                Uri uriSMSURI = Uri.parse("content://sms/");
-                                String[] projection = null;
-                                String selectionClause ="address = ?";
-                                String sortOrder = null;
-                                String[] selectionArgs={recyclerDataArrayList.get(position).getTitle()};
-                                ContentResolver contentResolver = getBaseContext().getContentResolver();
-                                getBaseContext().getContentResolver().delete(uriSMSURI,selectionClause,selectionArgs);
-                                recyclerDataArrayList.remove(position);
-                                dialog.cancel();
-                            }
-                        });
+                    public void onClick(DialogInterface dialog, int id) {
+                        adapter.notifyYourItemRemoved(position);
+                        Uri uriSMSURI = Uri.parse("content://sms/");
+                        String[] projection = null;
+                        String selectionClause = "address = ?";
+                        String sortOrder = null;
+                        String[] selectionArgs = {recyclerDataArrayList.get(position).getTitle()};
+                        ContentResolver contentResolver = getBaseContext().getContentResolver();
+                        getBaseContext().getContentResolver().delete(uriSMSURI, selectionClause, selectionArgs);
+                        recyclerDataArrayList.remove(position);
+                        dialog.cancel();
+                    }
+                });
 
                 builder1.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
 
                 AlertDialog alert11 = builder1.create();
                 alert11.show();
 
-/*
+                /*
 
 
- */
+                 */
             }
         });
 
@@ -244,7 +240,8 @@ public class MainActivity extends AppCompatActivity{
 
 
                 adapter.updateCopy(recyclerDataArrayList);
-            }};
+            }
+        };
         IntentFilter intentFilter = new IntentFilter("newsms");
         registerReceiver(myReceiver, intentFilter);
         searchView.setSubmitButtonEnabled(true);
@@ -252,9 +249,9 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public boolean onQueryTextSubmit(String query) {
                 String openPhoneNumber = searchView.getQuery().toString().replaceAll("[^\\d.]", "");
-                if (openPhoneNumber.length()<7){
-                    Toast.makeText(getBaseContext(),"Phone number too short",Toast.LENGTH_SHORT).show();
-                }else {
+                if (openPhoneNumber.length() < 7) {
+                    Toast.makeText(getBaseContext(), "Phone number too short", Toast.LENGTH_SHORT).show();
+                } else {
                     Intent intent = new Intent(getBaseContext(), com.example.smsmessaging.SecondActivity.class);
                     intent.putExtra("phoneNumber", openPhoneNumber);
                     startActivity(intent);
@@ -274,9 +271,11 @@ public class MainActivity extends AppCompatActivity{
         });
 
     }
+
     public boolean isDefaultSmsApp(Context context) {
         return context.getPackageName().equals(Telephony.Sms.getDefaultSmsPackage(context));
     }
+
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
@@ -284,9 +283,11 @@ public class MainActivity extends AppCompatActivity{
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
             case R.id.show_search:
-                if(searchView.getVisibility()==View.GONE){
+                if (searchView.getVisibility() == View.GONE) {
                     searchView.setVisibility(View.VISIBLE);
-                }else{searchView.setVisibility(View.GONE);}
+                } else {
+                    searchView.setVisibility(View.GONE);
+                }
 
             /*case R.id.action_favorite:
                 // User chose the "Favorite" action, mark the current item
@@ -302,6 +303,7 @@ public class MainActivity extends AppCompatActivity{
 
         }
     }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (isDefaultSmsApp(getBaseContext())) {
@@ -310,7 +312,8 @@ public class MainActivity extends AppCompatActivity{
 
         }
     }
-    public void goSettingMain(){
+
+    public void goSettingMain() {
 
 
         Intent intent = new Intent(getBaseContext(), com.example.smsmessaging.SettingsActivityMain.class);
@@ -327,13 +330,12 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         try {
             unregisterReceiver(myReceiver);
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
 
         }
     }
@@ -343,11 +345,10 @@ public class MainActivity extends AppCompatActivity{
         super.onPause();
         try {
             unregisterReceiver(myReceiver);
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
 
         }
     }
-
 
 
     @Override
@@ -355,11 +356,12 @@ public class MainActivity extends AppCompatActivity{
 
 
         super.onResume();
-        try{
+        try {
             registerReceiver(myReceiver, new IntentFilter("newsms"));
-        }catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
         }
     }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.bar, menu);
@@ -385,7 +387,7 @@ public class MainActivity extends AppCompatActivity{
             c.moveToPrevious();
 
             //for (int i = 0; i < totalSMS; i++) {
-            while((c.moveToNext())){
+            while ((c.moveToNext())) {
                 if (!phoneNumbers.contains(c.getString(c.getColumnIndexOrThrow("address")).replaceAll("[^\\d.]", ""))) {
 
 
@@ -394,10 +396,10 @@ public class MainActivity extends AppCompatActivity{
                     date.add(c.getString(c.getColumnIndexOrThrow("date")));
                     cdate = (c.getString(c.getColumnIndexOrThrow("date")));
 
-                    if(cdate.contains(datef))
-                    { time.add(cdate.substring(8,13)); }
-                    else{
-                    time.add(cdate.substring(3,8));
+                    if (cdate.contains(datef)) {
+                        time.add(cdate.substring(8, 13));
+                    } else {
+                        time.add(cdate.substring(3, 8));
                     }
 
 
@@ -412,23 +414,23 @@ public class MainActivity extends AppCompatActivity{
 
         return phoneNumbers;
     }
-    public void smsOpenMessage(View v){
 
+    public void smsOpenMessage(View v) {
 
 
         String openPhoneNumber = searchView.getQuery().toString().replaceAll("[^\\d.]", "");
-        if (openPhoneNumber.length()<7){
-            Toast.makeText(getBaseContext(),"Phone number too short",Toast.LENGTH_SHORT).show();
-        }else {
+        if (openPhoneNumber.length() < 7) {
+            Toast.makeText(getBaseContext(), "Phone number too short", Toast.LENGTH_SHORT).show();
+        } else {
             Intent intent = new Intent(v.getContext(), com.example.smsmessaging.SecondActivity.class);
             intent.putExtra("phoneNumber", openPhoneNumber);
             startActivity(intent);
         }
 
-        }
-
-
     }
+
+
+}
 
 
 

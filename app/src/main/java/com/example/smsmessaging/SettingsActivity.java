@@ -1,7 +1,6 @@
 package com.example.smsmessaging;
 
 
-
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -62,7 +61,8 @@ public class SettingsActivity extends AppCompatActivity {
     public BroadcastReceiver broadcastReceiver;
     public String SENT;
     public static Queue<String> messages;
-    public String TAG=SettingsActivity.class.getSimpleName();
+    public String TAG = SettingsActivity.class.getSimpleName();
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
@@ -70,7 +70,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar3);
         Intent intent = getIntent();
-        phoneString=intent.getStringExtra("phoneString");
+        phoneString = intent.getStringExtra("phoneString");
 
 
         setSupportActionBar(myToolbar);
@@ -78,26 +78,21 @@ public class SettingsActivity extends AppCompatActivity {
 
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
-        setTitle("+"+phoneString+" Settings");
-        messages=new LinkedList<>();
+        setTitle("+" + phoneString + " Settings");
+        messages = new LinkedList<>();
 
-        broadcastReceiver = new BroadcastReceiver()
-        {
+        broadcastReceiver = new BroadcastReceiver() {
             @Override
-            public void onReceive(Context context, Intent intent)
-            {
+            public void onReceive(Context context, Intent intent) {
 
 
                 intent.removeCategory(SENT);
                 intent.removeExtra(SENT);
-String messagecur = messages.remove();
-                switch (getResultCode())
-                {
+                String messagecur = messages.remove();
+                switch (getResultCode()) {
 
                     case Activity.RESULT_OK:
                         Toast.makeText(getBaseContext(), "SMS sent", Toast.LENGTH_SHORT).show();
-
-
 
 
                         ContentResolver contentResolver = getBaseContext().getContentResolver();
@@ -110,16 +105,15 @@ String messagecur = messages.remove();
                         SimpleDateFormat sdf = new SimpleDateFormat("YY/MM/ddHH:mm:ss");
 
                         String currentTime = sdf.format(new Date());
-                        values.put("date",currentTime);
+                        values.put("date", currentTime);
 
                         Uri uriSMSURI = Uri.parse("content://sms/sent");
                         contentResolver.insert(uriSMSURI, values);
 
 
-
                         break;
                     case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-                        Log.d(TAG,messagecur );
+                        Log.d(TAG, messagecur);
                         Toast.makeText(getBaseContext(), "Generic failure", Toast.LENGTH_SHORT).show();
                         break;
                     case SmsManager.RESULT_ERROR_NO_SERVICE:
@@ -138,7 +132,7 @@ String messagecur = messages.remove();
 
         };
         SENT = "SMS_SENT_SETTINGS";
-        registerReceiver(broadcastReceiver,new IntentFilter(SENT));
+        registerReceiver(broadcastReceiver, new IntentFilter(SENT));
 
     }
 
@@ -147,7 +141,7 @@ String messagecur = messages.remove();
         try {
             unregisterReceiver(broadcastReceiver);
 
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
 
         }
     }
@@ -158,11 +152,10 @@ String messagecur = messages.remove();
         try {
 
             unregisterReceiver(broadcastReceiver);
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
 
         }
     }
-
 
 
     @Override
@@ -187,38 +180,39 @@ String messagecur = messages.remove();
         RSAPublicKey publicKeyRsa = (RSAPublicKey) publicKey;
 
 
-        SmsSplit(phoneString, "***"+Base64.getEncoder().encodeToString(publicKeyRsa.getEncoded()));
-
-
+        SmsSplit(phoneString, "***" + Base64.getEncoder().encodeToString(publicKeyRsa.getEncoded()));
 
 
     }
-    public void SmsSplit(String address,String message){
-        while(!message.isEmpty()){
-        if(message.length()>150){
-            messages.add(message.substring(0,150));
-            SendSms(address,message.substring(0,150));
-            Log.d(TAG, "SmsSplit: "+message.substring(0,150));
 
-            message=message.substring(150);
-        }else{
-            messages.add(message);
-            SendSms(address, message);
-            Log.d(TAG, "SmsSplit: "+message);
+    public void SmsSplit(String address, String message) {
+        while (!message.isEmpty()) {
+            if (message.length() > 150) {
+                messages.add(message.substring(0, 150));
+                SendSms(address, message.substring(0, 150));
+                Log.d(TAG, "SmsSplit: " + message.substring(0, 150));
 
-            message="";
-        }
+                message = message.substring(150);
+            } else {
+                messages.add(message);
+                SendSms(address, message);
+                Log.d(TAG, "SmsSplit: " + message);
+
+                message = "";
+            }
 
         }
 
     }
-    public void SendSms(String smsAddress, String smsMessage){
-        address=smsAddress;
-        message=smsMessage;
+
+    public void SendSms(String smsAddress, String smsMessage) {
+        address = smsAddress;
+        message = smsMessage;
         try {
 
             Thread.sleep(500);
-        }catch(Exception e){}
+        } catch (Exception e) {
+        }
 
         String scAddress = null;
         SENT = "SMS_SENT_SETTINGS";
@@ -231,9 +225,9 @@ String messagecur = messages.remove();
                 sentPI, null);
 
 
-
     }
-    public void GetPublicKey(){
+
+    public void GetPublicKey() {
         String d = "";
         try {
             ContextWrapper contextWrapper = new ContextWrapper(MyApplication.getAppContext());
@@ -248,9 +242,11 @@ String messagecur = messages.remove();
 
             publicKey = keyFactory.generatePublic(publicKeySpec);
 
-        }catch (Exception e){ Log.d("noneed",e.toString());}
+        } catch (Exception e) {
+            Log.d("noneed", e.toString());
+        }
 
     }
-    }
+}
 
 

@@ -18,13 +18,13 @@ public class RecyclerDataMain {
 
     private String time;
 
-    public String getMessage() {return message;}
+    public String getMessage() {
+        return message;
+    }
 
     public void setMessage(String message) {
         this.message = message;
     }
-
-
 
 
     public String getTitle() {
@@ -43,11 +43,11 @@ public class RecyclerDataMain {
         this.folder = folder;
     }
 
-    public RecyclerDataMain(String title, int folder, String message, String time,Boolean read) {
+    public RecyclerDataMain(String title, int folder, String message, String time, Boolean read) {
         this.title = title;
         this.read = read;
         this.folder = folder;
         this.message = message;
-        this.time=time;
+        this.time = time;
     }
 }

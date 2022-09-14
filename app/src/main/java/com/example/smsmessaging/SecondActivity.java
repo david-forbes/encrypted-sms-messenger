@@ -44,11 +44,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+
 import androidx.appcompat.widget.SwitchCompat;
 
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -73,11 +75,13 @@ public class SecondActivity extends AppCompatActivity {
     private ArrayList<RecyclerData> recyclerDataArrayList;
     public int MY_PERMISSIONS_REQUEST_SEND_SMS;
     int color;
-public List<Sms> textMessageList;
-public BroadcastReceiver broadcastReceiver;
+    public List<Sms> textMessageList;
+    public BroadcastReceiver broadcastReceiver;
+
     public ArrayList<RecyclerData> getRecyclerDataArrayList() {
         return recyclerDataArrayList;
     }
+
     public String phoneString;
     public String TAG = "SecondActivity.java";
     public Boolean permission;
@@ -93,6 +97,7 @@ public BroadcastReceiver broadcastReceiver;
     public String rec_data;
     public EditText smsEditText;
     public static final String BROADCAST = "PACKAGE_NAME.android.action.broadcast";
+
     public void setRecyclerDataArrayList(ArrayList<RecyclerData> recyclerDataArrayList) {
         this.recyclerDataArrayList = recyclerDataArrayList;
     }
@@ -107,7 +112,6 @@ public BroadcastReceiver broadcastReceiver;
 
         //togSwitch = findViewById(R.layout);
         // inflate the layout
-
 
 
 // load the text view
@@ -129,8 +133,8 @@ public BroadcastReceiver broadcastReceiver;
 
             phoneString = sharedPref.getString("phoneString", "Fail");
         }
-        String string = sharedPref.getString(phoneString+"DRAFT",null);
-        if(string!=null){
+        String string = sharedPref.getString(phoneString + "DRAFT", null);
+        if (string != null) {
             smsEditText.setText(string.toString());
         }
         setTitle(phoneString);
@@ -138,7 +142,7 @@ public BroadcastReceiver broadcastReceiver;
         recyclerView = findViewById(R.id.idCourseRV);
         recyclerDataArrayList = new ArrayList<>();
 
-messages=new LinkedList<>();
+        messages = new LinkedList<>();
         final String myPackageName = getPackageName();
         final String defaultSms = Telephony.Sms.getDefaultSmsPackage(this);
         if ((defaultSms == null) || !(defaultSms.equals(myPackageName))) {
@@ -222,7 +226,7 @@ messages=new LinkedList<>();
                 if (messagePhoneNumber.toString().equals(phoneString.toString().replaceAll("[^\\d.]", ""))) {
                     //Toast.makeText(context, "new message",Toast.LENGTH_SHORT);
                     String message = intent.getStringExtra("message");
-                    recyclerDataArrayList.add(recyclerDataArrayList.size(), new RecyclerData(message, 1, messageDate,0));
+                    recyclerDataArrayList.add(recyclerDataArrayList.size(), new RecyclerData(message, 1, messageDate, 0));
                     adapter.notifyItemInserted(recyclerDataArrayList.size());
                     recyclerView.scrollToPosition(recyclerDataArrayList.size() - 1);
                 }
@@ -245,12 +249,12 @@ messages=new LinkedList<>();
 
             }
 
-            public void onTextChanged(CharSequence s, int start,int before, int count) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
                 SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
 
                 SharedPreferences.Editor editor = sharedPref.edit();
 
-                editor.putString(phoneString+"DRAFT", smsEditText.getText().toString());
+                editor.putString(phoneString + "DRAFT", smsEditText.getText().toString());
                 editor.apply();
 
             }
@@ -260,30 +264,25 @@ messages=new LinkedList<>();
 
             }
         });
-        broadcastReceiver = new BroadcastReceiver()
-        {
+        broadcastReceiver = new BroadcastReceiver() {
             @Override
-            public void onReceive(Context context, Intent intent)
-            {
+            public void onReceive(Context context, Intent intent) {
 
 
                 intent.removeCategory(SENT);
                 intent.removeExtra(SENT);
-                String messagecur=messages.remove();
+                String messagecur = messages.remove();
 
-                switch (getResultCode())
-                {
+                switch (getResultCode()) {
 
                     case Activity.RESULT_OK:
                         Toast.makeText(getBaseContext(), "SMS sent", Toast.LENGTH_SHORT).show();
 
 
-
-
                         ContentResolver contentResolver = getBaseContext().getContentResolver();
                         ContentValues values = new ContentValues();
-                        Log.d(TAG, smsMessage+destinationAddress);
-                        Log.d(TAG, "onReceive: "+getResultCode());
+                        Log.d(TAG, smsMessage + destinationAddress);
+                        Log.d(TAG, "onReceive: " + getResultCode());
                         values.put("body", messagecur);
                         values.put("address", destinationAddress.replaceAll("[^\\d.]", ""));
 
@@ -291,14 +290,14 @@ messages=new LinkedList<>();
                         SimpleDateFormat sdf = new SimpleDateFormat("YY/MM/ddHH:mm:ss");
 
                         String currentTime = sdf.format(new Date());
-                        values.put("date",currentTime);
+                        values.put("date", currentTime);
 
                         Uri uriSMSURI = Uri.parse("content://sms/sent");
                         //contentResolver.insert(uriSMSURI, values);
 
-                        recyclerDataArrayList.add(recyclerDataArrayList.size(),new RecyclerData(messagecur, 0,currentTime,0));
+                        recyclerDataArrayList.add(recyclerDataArrayList.size(), new RecyclerData(messagecur, 0, currentTime, 0));
                         contentResolver.insert(uriSMSURI, values);
-                        adapter.notifyItemInserted(recyclerDataArrayList.size()-1);
+                        adapter.notifyItemInserted(recyclerDataArrayList.size() - 1);
                         recyclerView.scrollToPosition(recyclerDataArrayList.size() - 1);
 
                         break;
@@ -321,8 +320,9 @@ messages=new LinkedList<>();
 
         };
         SENT = "SMS_SENT";
-        registerReceiver(broadcastReceiver,new IntentFilter(SENT));
+        registerReceiver(broadcastReceiver, new IntentFilter(SENT));
     }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.tog, menu);
@@ -330,6 +330,7 @@ messages=new LinkedList<>();
         togSwitch = item.findViewById(R.id.switch1);
         return true;
     }
+
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
@@ -352,7 +353,7 @@ messages=new LinkedList<>();
         }
     }
 
-    public void goSetting(){
+    public void goSetting() {
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
 
@@ -361,7 +362,7 @@ messages=new LinkedList<>();
 
 
         Intent intent4 = new Intent(getBaseContext(), com.example.smsmessaging.SettingsActivity.class);
-        intent4.putExtra("phoneString",phoneString);
+        intent4.putExtra("phoneString", phoneString);
         startActivity(intent4);
     }
 
@@ -372,7 +373,7 @@ messages=new LinkedList<>();
         try {
             unregisterReceiver(broadcastReceiver);
             unregisterReceiver(myReceiver);
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
 
         }
     }
@@ -383,11 +384,10 @@ messages=new LinkedList<>();
         try {
             unregisterReceiver(myReceiver);
             unregisterReceiver(broadcastReceiver);
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
 
         }
     }
-
 
 
     @Override
@@ -395,17 +395,17 @@ messages=new LinkedList<>();
 
 
         super.onResume();
-        try{
+        try {
             registerReceiver(broadcastReceiver, new IntentFilter(SENT));
-    registerReceiver(myReceiver, new IntentFilter("newsms"));
-    }catch(IllegalArgumentException e){
+            registerReceiver(myReceiver, new IntentFilter("newsms"));
+        } catch (IllegalArgumentException e) {
         }
     }
 
 
     public List<RecyclerData> createList() {
         textMessageList = getAllSms();
-        List<RecyclerData> newTextList= new ArrayList<>();
+        List<RecyclerData> newTextList = new ArrayList<>();
         if (textMessageList.size() > 0) {
             for (int i = 0; i < textMessageList.size(); i++) {
                 if (textMessageList.get(i).getFolderName() == "sent") {
@@ -413,55 +413,54 @@ messages=new LinkedList<>();
                 } else {
                     color = 1;//ContextCompat.getColor(this, R.color.teal);
                 }
-                recyclerDataArrayList.add(new RecyclerData(textMessageList.get(i).getMsg(), color,textMessageList.get(i).getTime(), 0));
-                newTextList.add(0, new RecyclerData(textMessageList.get(i).getMsg(),color,textMessageList.get(i).getTime(),0));
-            }}
-    //return recyclerDataArrayList;
-    return recyclerDataArrayList;
-
-
-
+                recyclerDataArrayList.add(new RecyclerData(textMessageList.get(i).getMsg(), color, textMessageList.get(i).getTime(), 0));
+                newTextList.add(0, new RecyclerData(textMessageList.get(i).getMsg(), color, textMessageList.get(i).getTime(), 0));
+            }
+        }
+        //return recyclerDataArrayList;
+        return recyclerDataArrayList;
 
 
     }
 
-            public void onRequestPermissionsResult ( int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
 
 
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-                if (requestCode == MY_PERMISSIONS_REQUEST_SEND_SMS) {
-                    if (permissions.length > 0 && grantResults.length > 0) {
-                        if (grantResults[0] == (PackageManager.PERMISSION_GRANTED)) {
-                            permission = true;
-                            //Toast.makeText(this, "approved",
-                            //      Toast.LENGTH_LONG).show();
-                        }
-                    }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MY_PERMISSIONS_REQUEST_SEND_SMS) {
+            if (permissions.length > 0 && grantResults.length > 0) {
+                if (grantResults[0] == (PackageManager.PERMISSION_GRANTED)) {
+                    permission = true;
+                    //Toast.makeText(this, "approved",
+                    //      Toast.LENGTH_LONG).show();
                 }
             }
+        }
+    }
 
 
-            private Boolean checkForSmsPermission () {
-                if (ActivityCompat.checkSelfPermission(this,
-                        Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
-                    return (true);
-                    // Permission not yet granted. Use requestPermissions().
-                    // MY_PERMISSIONS_REQUEST_SEND_SMS is an
-                    // app-defined int constant. The callback method gets the
-                    // result of the request.
+    private Boolean checkForSmsPermission() {
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
+            return (true);
+            // Permission not yet granted. Use requestPermissions().
+            // MY_PERMISSIONS_REQUEST_SEND_SMS is an
+            // app-defined int constant. The callback method gets the
+            // result of the request.
 
 
-                } else {
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST_SEND_SMS);
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST_SEND_SMS);
 
-                    // Permission already granted. Enable the SMS button.
-                }
-                if (permission) return (true);
-                return false;
-            }
-            public void smsSendMessage(View view){
-                destinationAddress = phoneString;
+            // Permission already granted. Enable the SMS button.
+        }
+        if (permission) return (true);
+        return false;
+    }
+
+    public void smsSendMessage(View view) {
+        destinationAddress = phoneString;
                 /*
                 SharedPreferences sharedPref1 =getBaseContext().getSharedPreferences(
                         "com.example.smsmessaging", Context.MODE_PRIVATE);
@@ -469,61 +468,59 @@ messages=new LinkedList<>();
 */
 
 
+        smsMessage = smsEditText.getText().toString();
+        smsEditText.setText("");
+        if (smsMessage.isEmpty()) {
+            Toast.makeText(getBaseContext(), "Empty Message", Toast.LENGTH_SHORT).show();
+            return;
 
-
-
-                smsMessage = smsEditText.getText().toString();
-                smsEditText.setText("");
-                if(smsMessage.isEmpty()){
-                    Toast.makeText(getBaseContext(),"Empty Message", Toast.LENGTH_SHORT).show();
-                    return;
-
-            }
-                if (togSwitch.isChecked()){
+        }
+        if (togSwitch.isChecked()) {
 /*
                     SharedPreferences sharedPref =MyApplication.getAppContext().getSharedPreferences(
                             "com.example.smsmessaging", Context.MODE_PRIVATE);
                     String pubKey = sharedPref.getString(phoneString+"PUBLICKEY","");
 
  */
-                    SharedPreferences sharedPref =MyApplication.getAppContext().getSharedPreferences(
-                            "public_key", MODE_PRIVATE);
-                    String pubKey = sharedPref.getString(phoneString,"");
-                    if(pubKey.isEmpty()){
-                        Toast.makeText(this,"No saved encryption key for this number",Toast.LENGTH_SHORT).show();
-                        return;
+            SharedPreferences sharedPref = MyApplication.getAppContext().getSharedPreferences(
+                    "public_key", MODE_PRIVATE);
+            String pubKey = sharedPref.getString(phoneString, "");
+            if (pubKey.isEmpty()) {
+                Toast.makeText(this, "No saved encryption key for this number", Toast.LENGTH_SHORT).show();
+                return;
 
-                    }
-                    PublicKey standInPubKey = EncryptionHelper.GetPublicKey();
-                    String standInString = Base64.getEncoder().encodeToString(standInPubKey.getEncoded());
+            }
+            PublicKey standInPubKey = EncryptionHelper.GetPublicKey();
+            String standInString = Base64.getEncoder().encodeToString(standInPubKey.getEncoded());
 
-                    PublicKey publicKey = EncryptionHelper.PublicKeyFromString(standInString);
+            PublicKey publicKey = EncryptionHelper.PublicKeyFromString(standInString);
 
 
+            String string = Base64.getDecoder().decode(pubKey).toString();
+            //string = EncryptionHelper.encrypt(publicKey, smsMessage);
+            PrivateKey privateKey = EncryptionHelper.GetPrivateKey();
+            Log.d(TAG, "smsSendMessage: privateKey is " + privateKey);
+            //Log.d(TAG, "smsSendMessage: decrypted message is "+EncryptionHelper.decrypt(privateKey,string));
+            SmsSplit(destinationAddress, string);
+        } else {
+            SmsSplit(destinationAddress, smsMessage);
+        }
+    }
 
-                    String string = Base64.getDecoder().decode(pubKey).toString();
-                    //string = EncryptionHelper.encrypt(publicKey, smsMessage);
-                    PrivateKey privateKey = EncryptionHelper.GetPrivateKey();
-                    Log.d(TAG, "smsSendMessage: privateKey is "+privateKey);
-                    //Log.d(TAG, "smsSendMessage: decrypted message is "+EncryptionHelper.decrypt(privateKey,string));
-                    SmsSplit(destinationAddress, string);
-                }else{
-                SmsSplit(destinationAddress, smsMessage);
-    }}
-    public void SmsSplit(String address,String message1){
-        while(!message1.isEmpty()){
-            if(message1.length()>150){
-                messages.add(message1.substring(0,150));
-                SendSmsSecond(address,message1.substring(0,150));
-                Log.d(TAG, "SmsSplit: "+message1.substring(0,150));
+    public void SmsSplit(String address, String message1) {
+        while (!message1.isEmpty()) {
+            if (message1.length() > 150) {
+                messages.add(message1.substring(0, 150));
+                SendSmsSecond(address, message1.substring(0, 150));
+                Log.d(TAG, "SmsSplit: " + message1.substring(0, 150));
 
-                message1=message1.substring(150);
-            }else{
+                message1 = message1.substring(150);
+            } else {
                 messages.add(message1);
                 SendSmsSecond(address, message1);
-                Log.d(TAG, "SmsSplit: "+message1);
+                Log.d(TAG, "SmsSplit: " + message1);
 
-                message1="";
+                message1 = "";
             }
 
         }
@@ -531,108 +528,101 @@ messages=new LinkedList<>();
     }
 
 
-            public void SendSmsSecond (String address,String message){
-                smsMessage=message;
-                destinationAddress=address;
-                String scAddress = null;
-                SENT = "SMS_SENT";
-                String DELIVERED = "SMS_DELIVERED";
+    public void SendSmsSecond(String address, String message) {
+        smsMessage = message;
+        destinationAddress = address;
+        String scAddress = null;
+        SENT = "SMS_SENT";
+        String DELIVERED = "SMS_DELIVERED";
 
-                PendingIntent sentPI = PendingIntent.getBroadcast(this, 0, new Intent(SENT), 0);
+        PendingIntent sentPI = PendingIntent.getBroadcast(this, 0, new Intent(SENT), 0);
 
-                SmsManager smsManager = SmsManager.getDefault();
-                smsManager.sendTextMessage(destinationAddress.replaceAll("[^\\d.]", ""), scAddress, smsMessage,
-                        sentPI, null);
-
-
-/*
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage(destinationAddress.replaceAll("[^\\d.]", ""), scAddress, smsMessage,
+                sentPI, null);
 
 
- */
+        /*
 
 
+         */
 
 
-                }
-
+    }
 
 
     @SuppressLint("Range")
-            public List<Sms> getAllSms(){
+    public List<Sms> getAllSms() {
 
 
+        //String phoneString = "6505551212";
 
-                //String phoneString = "6505551212";
+        String TAG = "SecondActivity";
+        List<Sms> lstSms = new ArrayList<Sms>();
+        List<String> smsTxt = new ArrayList<String>();
+        Sms objSms = new Sms();
+        Uri message = Uri.parse("content://sms/");
+        ContentResolver cr = this.getContentResolver();
 
-                String TAG = "SecondActivity";
-                List<Sms> lstSms = new ArrayList<Sms>();
-                List<String> smsTxt = new ArrayList<String>();
-                Sms objSms = new Sms();
-                Uri message = Uri.parse("content://sms/");
-                ContentResolver cr = this.getContentResolver();
+        Cursor c = cr.query(message, null, null, null, "date ASC");
+        this.startManagingCursor(c);
+        //int totalSMS = c.getCount();
 
-                Cursor c = cr.query(message, null, null, null, "date ASC");
-                this.startManagingCursor(c);
-                //int totalSMS = c.getCount();
+        if (c.moveToFirst()) {
+            c.moveToPrevious();
 
-                if (c.moveToFirst()) {
-                    c.moveToPrevious();
+            //for (int i = 0; i < totalSMS; i++) {
+            while ((c.moveToNext())) {
+                if (c.getString(c.getColumnIndexOrThrow("address")).equals(phoneString)) {
 
-                    //for (int i = 0; i < totalSMS; i++) {
-                    while ((c.moveToNext())) {
-                        if (c.getString(c.getColumnIndexOrThrow("address")).equals(phoneString)) {
+                    Log.d(TAG, "sms found" + phoneString);
+                    objSms = new Sms();
 
-                            Log.d(TAG, "sms found"+phoneString);
-                            objSms = new Sms();
-
-                            try{
-                                Log.d("heow", c.getString(c.getColumnIndexOrThrow("_id")));
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            objSms.setId(c.getString(c.getColumnIndexOrThrow("_id")));
-                            objSms.setAddress(c.getString(c
-                                    .getColumnIndexOrThrow("address")));
-                            objSms.setMsg(c.getString(c.getColumnIndexOrThrow("body")));
-                            objSms.setReadState(c.getString(c.getColumnIndex("read")));
-                            objSms.setTime(c.getString(c.getColumnIndexOrThrow("date")));
-                            if (c.getString(c.getColumnIndexOrThrow("type")).contains("1")) {
-                                objSms.setFolderName("inbox");
-                            } else {
-                                objSms.setFolderName("sent");
-                            }
-                            //smsTxt.add(c.getString(c.getColumnIndexOrThrow("body")));
-
-
-                            lstSms.add(objSms);
-                        }
+                    try {
+                        Log.d("heow", c.getString(c.getColumnIndexOrThrow("_id")));
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+                    objSms.setId(c.getString(c.getColumnIndexOrThrow("_id")));
+                    objSms.setAddress(c.getString(c
+                            .getColumnIndexOrThrow("address")));
+                    objSms.setMsg(c.getString(c.getColumnIndexOrThrow("body")));
+                    objSms.setReadState(c.getString(c.getColumnIndex("read")));
+                    objSms.setTime(c.getString(c.getColumnIndexOrThrow("date")));
+                    if (c.getString(c.getColumnIndexOrThrow("type")).contains("1")) {
+                        objSms.setFolderName("inbox");
+                    } else {
+                        objSms.setFolderName("sent");
+                    }
+                    //smsTxt.add(c.getString(c.getColumnIndexOrThrow("body")));
+
+
+                    lstSms.add(objSms);
                 }
-                // else {
-                // throw new RuntimeException("You have no SMS");
-                // }
-                c.close();
-                for (int i = 0; i < lstSms.size(); i++) {
-                    Log.d(TAG, lstSms.get(i).getMsg() + "coe370");
-                }
-
-                Log.d(TAG, lstSms + "code349");
-                //return smsTxt;
-                return lstSms;
             }
-
-
-
-
-
-            public void onButtonTwoClick (View view){
-
-
-                Intent replyIntent = new Intent();
-                setResult(RESULT_OK, replyIntent);
-                finish();
-
-            }
-
-
         }
+        // else {
+        // throw new RuntimeException("You have no SMS");
+        // }
+        c.close();
+        for (int i = 0; i < lstSms.size(); i++) {
+            Log.d(TAG, lstSms.get(i).getMsg() + "coe370");
+        }
+
+        Log.d(TAG, lstSms + "code349");
+        //return smsTxt;
+        return lstSms;
+    }
+
+
+    public void onButtonTwoClick(View view) {
+
+
+        Intent replyIntent = new Intent();
+        setResult(RESULT_OK, replyIntent);
+        finish();
+
+    }
+
+
+}

@@ -49,14 +49,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.cardViewDate.setVisibility(View.GONE);
         holder.cardViewImage.setVisibility(View.GONE);
 
-        int top=0;
+        int top = 0;
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) holder.cardViewId.getLayoutParams();
 
         // Set the data to textview and imageview.
         RecyclerData recyclerData = courseDataArrayList.get(position);
-        if(position-1<=0||!recyclerData.getDate().substring(0,13).equals(courseDataArrayList.get(position-1).getDate().substring(0,13))) {
+        if (position - 1 <= 0 || !recyclerData.getDate().substring(0, 13).equals(courseDataArrayList.get(position - 1).getDate().substring(0, 13))) {
 
-            String text=recyclerData.getDate().substring(3,8)+" "+recyclerData.getDate().substring(8,13);
+            String text = recyclerData.getDate().substring(3, 8) + " " + recyclerData.getDate().substring(8, 13);
             holder.textViewDate.setText(text);
 
             holder.cardViewDate.setVisibility(View.VISIBLE);
@@ -64,60 +64,53 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         }
 
-        if(recyclerData.getImage()!=0){
+        if (recyclerData.getImage() != 0) {
             ConstraintLayout.LayoutParams params2 = (ConstraintLayout.LayoutParams) holder.cardViewImage.getLayoutParams();
 
             holder.cardViewImage.setVisibility(View.VISIBLE);
 
             holder.cardViewId.setVisibility(View.GONE);
 
-            if(recyclerData.getFolder()==1) {
-                params2.horizontalBias=0.1f;
+            if (recyclerData.getFolder() == 1) {
+                params2.horizontalBias = 0.1f;
                 holder.cardViewImage.setLayoutParams(params2);
 
 
-
-
-            }else if(recyclerData.getFolder()==0){
-                params2.horizontalBias=0.9f;
+            } else if (recyclerData.getFolder() == 0) {
+                params2.horizontalBias = 0.9f;
                 holder.cardViewImage.setLayoutParams(params2);
-
 
 
             }
-        }else{
+        } else {
 
-        holder.courseTV.setText(recyclerData.getTitle());
+            holder.courseTV.setText(recyclerData.getTitle());
 
-        //holder.courseIV.setImageResource(recyclerData.getFolder());
-
-
-
-       // params2.horizontalBias=(float)0.5;
+            //holder.courseIV.setImageResource(recyclerData.getFolder());
 
 
-        //holder.cardViewId.setCardBackgroundColor(recyclerData.getFolder());
-        if(recyclerData.getFolder()==1) {
-            params.horizontalBias=0.25f;
-            holder.cardViewId.setLayoutParams(params);
+            // params2.horizontalBias=(float)0.5;
 
 
+            //holder.cardViewId.setCardBackgroundColor(recyclerData.getFolder());
+            if (recyclerData.getFolder() == 1) {
+                params.horizontalBias = 0.25f;
+                holder.cardViewId.setLayoutParams(params);
 
 
-            holder.cardViewId.setCardBackgroundColor(ContextCompat.getColor(MyApplication.getAppContext(), R.color.teal));
-        }else if(recyclerData.getFolder()==0){
-            params.horizontalBias=0.75f;
-            holder.cardViewId.setLayoutParams(params);
+                holder.cardViewId.setCardBackgroundColor(ContextCompat.getColor(MyApplication.getAppContext(), R.color.teal));
+            } else if (recyclerData.getFolder() == 0) {
+                params.horizontalBias = 0.75f;
+                holder.cardViewId.setLayoutParams(params);
 
-            holder.cardViewId.setCardBackgroundColor(ContextCompat.getColor(MyApplication.getAppContext(),R.color.white));
+                holder.cardViewId.setCardBackgroundColor(ContextCompat.getColor(MyApplication.getAppContext(), R.color.white));
+
+            }
+            holder.cardViewId.setRadius(30);
+
 
         }
-        holder.cardViewId.setRadius(30);
-
-
-
-
-    }}
+    }
 
 
     @Override
@@ -127,7 +120,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     // View Holder Class to handle Recycler View.
-    public static class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
+    public static class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         private TextView courseTV;
         private CardView cardViewId;
@@ -138,7 +131,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         private CardView cardViewImage;
 
 
-
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
             itemView.findViewById(R.id.cardViewId).setOnClickListener(this);
@@ -146,10 +138,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             courseTV = itemView.findViewById(R.id.idTVCourse);
             cardViewId = itemView.findViewById(R.id.cardViewId);
             textViewDate = itemView.findViewById(R.id.textViewDate);
-            cardViewDate= itemView.findViewById(R.id.cardViewDate);
-            imageView2=itemView.findViewById(R.id.imageView2);
-            cardViewMain=itemView.findViewById(R.id.cardViewMain);
-            cardViewImage=itemView.findViewById(R.id.cardViewImage);
+            cardViewDate = itemView.findViewById(R.id.cardViewDate);
+            imageView2 = itemView.findViewById(R.id.imageView2);
+            cardViewMain = itemView.findViewById(R.id.cardViewMain);
+            cardViewImage = itemView.findViewById(R.id.cardViewImage);
         }
 
         public void onClick(View v) {
@@ -160,17 +152,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
         public boolean onLongClick(View v) {
-            clickListener.onItemLongClick(getAdapterPosition(),v);
+            clickListener.onItemLongClick(getAdapterPosition(), v);
             return true;
 
 
-
-}}
-        public void setOnItemClickListener(ClickListener clickListener) {
-            RecyclerViewAdapter.clickListener = clickListener;
-        }
-        public interface ClickListener {
-            void onItemClick(int position, View v);
-            void onItemLongClick(int position, View v);
         }
     }
+
+    public void setOnItemClickListener(ClickListener clickListener) {
+        RecyclerViewAdapter.clickListener = clickListener;
+    }
+
+    public interface ClickListener {
+        void onItemClick(int position, View v);
+
+        void onItemLongClick(int position, View v);
+    }
+}
