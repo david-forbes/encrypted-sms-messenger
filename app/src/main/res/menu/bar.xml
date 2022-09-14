@@ -10,7 +10,7 @@
         app:showAsAction="never"/>
     <item android:id="@+id/show_search"
         android:title="show search"
-        android:icon="@drawable/ic_baseline_search_24"
+        android:icon="@drawable/ic_baseline_send_24"
         app:showAsAction="always"/>
 
 </menu>

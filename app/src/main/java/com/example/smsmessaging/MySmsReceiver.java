@@ -138,10 +138,9 @@ public class MySmsReceiver extends BroadcastReceiver {
                 }
                 Toast.makeText(context.getApplicationContext(), message.substring(0, 3), Toast.LENGTH_SHORT).show();
                 if (message.substring(0, 3).equals("***")) {
-                    SharedPreferences sharedPref1 = MyApplication.getAppContext().getSharedPreferences(
-                            "public_key", Context.MODE_PRIVATE);
+
                     PublicKey publicKey = EncryptionHelper.GetPublicKeyFromBase64(message.substring(3));
-                    sharedPref1.edit().putString(keys[i].toString().replaceAll("[^\\d.]", ""), message.substring(3)).apply();
+
 
 
                     File directory = MyApplication.getAppContext().getDir(MyApplication.getAppContext().getFilesDir().getName(), Context.MODE_PRIVATE);
@@ -152,7 +151,7 @@ public class MySmsReceiver extends BroadcastReceiver {
                         X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(publicKey.getEncoded());
                         fosPublic.write(publicKey.getEncoded());
                         fosPublic.close();
-                        Toast.makeText(MyApplication.getAppContext(), "new encryption key added", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MyApplication.getAppContext(), "new encryption key added for"+keys[i].toString(), Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "onReceive: "+keys[i].toString()+publicKey);
                     }catch(Exception e){
                         Toast.makeText(MyApplication.getAppContext(),"Public Key was not saved",Toast.LENGTH_SHORT);
@@ -212,7 +211,7 @@ public class MySmsReceiver extends BroadcastReceiver {
 
 
                 Log.d(TAG, "onReceive: " + strMessage);
-                
+
                 Intent intent2 = new Intent();
                 intent2.setAction("newsms");
                 intent2.putExtra("phoneNumber", keys[i].toString().replaceAll("[^\\d.]", ""));

@@ -1,5 +1,7 @@
 package com.example.smsmessaging;
 
+import static com.example.smsmessaging.EncryptionHelper.convertDate;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,6 +48,8 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.android.smsmessaging.R;
 
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.text.SimpleDateFormat;
@@ -127,6 +131,10 @@ public class ConversationActivity extends AppCompatActivity {
         //phoneString="6505551212";
         recyclerView = findViewById(R.id.idCourseRV);
         recyclerDataArrayList = new ArrayList<>();
+
+
+
+
 
         messages = new LinkedList<>();
         final String myPackageName = getPackageName();
@@ -212,7 +220,7 @@ public class ConversationActivity extends AppCompatActivity {
                 if (messagePhoneNumber.toString().equals(phoneString.toString().replaceAll("[^\\d.]", ""))) {
                     //Toast.makeText(context, "new message",Toast.LENGTH_SHORT);
                     String message = intent.getStringExtra("message");
-                    recyclerDataArrayList.add(recyclerDataArrayList.size(), new RecyclerData(message, 1, messageDate, 0));
+                    recyclerDataArrayList.add(recyclerDataArrayList.size(), new RecyclerData(message, 1, convertDate(messageDate,"hh:mm"), 0));
                     adapter.notifyItemInserted(recyclerDataArrayList.size());
                     recyclerView.scrollToPosition(recyclerDataArrayList.size() - 1);
                 }
@@ -281,7 +289,7 @@ public class ConversationActivity extends AppCompatActivity {
                         Uri uriSMSURI = Uri.parse("content://sms/sent");
                         //contentResolver.insert(uriSMSURI, values);
 
-                        recyclerDataArrayList.add(recyclerDataArrayList.size(), new RecyclerData(messagecur, 0, currentTime, 0));
+                        recyclerDataArrayList.add(recyclerDataArrayList.size(), new RecyclerData(messagecur, 0, convertDate(currentTime,"hh:mm"), 0));
                         contentResolver.insert(uriSMSURI, values);
                         adapter.notifyItemInserted(recyclerDataArrayList.size() - 1);
                         recyclerView.scrollToPosition(recyclerDataArrayList.size() - 1);
@@ -399,8 +407,8 @@ public class ConversationActivity extends AppCompatActivity {
                 } else {
                     color = 1;//ContextCompat.getColor(this, R.color.teal);
                 }
-                recyclerDataArrayList.add(new RecyclerData(textMessageList.get(i).getMsg(), color, textMessageList.get(i).getTime(), 0));
-                newTextList.add(0, new RecyclerData(textMessageList.get(i).getMsg(), color, textMessageList.get(i).getTime(), 0));
+                recyclerDataArrayList.add(new RecyclerData(textMessageList.get(i).getMsg(), color, convertDate(textMessageList.get(i).getTime(),"hh:mm"), 0));
+                newTextList.add(0, new RecyclerData(textMessageList.get(i).getMsg(), color, convertDate(textMessageList.get(i).getTime(),"hh:mm"), 0));
             }
         }
         //return recyclerDataArrayList;

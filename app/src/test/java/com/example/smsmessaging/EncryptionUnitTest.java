@@ -10,7 +10,11 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import android.app.Activity;
+import android.util.Log;
+
 public class EncryptionUnitTest {
+
 
     @Test
 
@@ -51,6 +55,7 @@ public class EncryptionUnitTest {
     @Test
 
     public void encrypt_decrypt_public_key() {
+        String TAG = "encrypt_decrypt_public_key";
         try {
             KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
             generator.initialize(2048);
@@ -58,6 +63,7 @@ public class EncryptionUnitTest {
             PublicKey publicKey = pair.getPublic();
 
             String publicKeyBase64 = EncryptionHelper.GetBase64FromPublicKey(publicKey);
+            Log.d(TAG, "***"+publicKeyBase64);
             PublicKey publicKeyUnencrypted = EncryptionHelper.GetPublicKeyFromBase64(publicKeyBase64);
             assertEquals(publicKey, publicKeyUnencrypted);
         } catch (Exception e) {

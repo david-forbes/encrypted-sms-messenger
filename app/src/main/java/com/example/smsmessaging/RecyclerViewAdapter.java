@@ -54,15 +54,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         // Set the data to textview and imageview.
         RecyclerData recyclerData = courseDataArrayList.get(position);
-        if (position - 1 <= 0 || !recyclerData.getDate().substring(0, 13).equals(courseDataArrayList.get(position - 1).getDate().substring(0, 13))) {
+        //if (position - 1 <= 0 || !recyclerData.getDate().substring(0, 13).equals(courseDataArrayList.get(position - 1).getDate().substring(0, 13))) {
 
-            String text = recyclerData.getDate().substring(3, 8) + " " + recyclerData.getDate().substring(8, 13);
-            holder.textViewDate.setText(text);
+        //String text = recyclerData.getDate().substring(3, 8) + " " + recyclerData.getDate().substring(8, 13);
+        String text = recyclerData.getDate();
+        holder.textViewDate.setText(text);
 
-            holder.cardViewDate.setVisibility(View.VISIBLE);
+        holder.cardViewDate.setVisibility(View.VISIBLE);
 
 
-        }
+        //}
 
         if (recyclerData.getImage() != 0) {
             ConstraintLayout.LayoutParams params2 = (ConstraintLayout.LayoutParams) holder.cardViewImage.getLayoutParams();

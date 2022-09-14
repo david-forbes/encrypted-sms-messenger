@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.text.format.DateFormat;
 import android.util.Log;
 
 import java.io.File;
@@ -23,6 +24,10 @@ import java.util.Base64;
 import javax.crypto.Cipher;
 
 public class EncryptionHelper {
+
+    public static String convertDate(String dateInMilliseconds,String dateFormat) {
+        return DateFormat.format(dateFormat, Long.parseLong(dateInMilliseconds)).toString();
+    }
 
     public static void GenKeypair() {
         try {

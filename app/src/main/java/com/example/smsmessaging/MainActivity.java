@@ -1,5 +1,7 @@
 package com.example.smsmessaging;
 
+import static com.example.smsmessaging.EncryptionHelper.convertDate;
+
 import android.app.role.RoleManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -198,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (!phoneNumbers.contains(messagePhoneNumber.replaceAll("[^\\d.]", ""))) {
                     phoneNumbers.add(messagePhoneNumber.replaceAll("[^\\d.]", ""));
-                    recyclerDataArrayList.add(0, new RecyclerDataMain(messagePhoneNumber.replaceAll("[^\\d.]", ""), color, message, messageTime, null));
+                    recyclerDataArrayList.add(0, new RecyclerDataMain(messagePhoneNumber.replaceAll("[^\\d.]", ""), color, message, convertDate(messageTime,"hh:mm"), null));
                     adapter.notifyYourItemInserted(0);
                     adapter.notifyYourDataSetChanged(recyclerDataArrayList);
                     recyclerView.scrollToPosition(0);
@@ -208,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
                     for (int i = 0; i < recyclerDataArrayList.size(); i++) {
                         if (recyclerDataArrayList.get(i).getTitle().equals(messagePhoneNumber)) {
                             recyclerDataArrayList.remove(i);
-                            recyclerDataArrayList.add(0, new RecyclerDataMain(messagePhoneNumber, color, message, messageTime, null));
+                            recyclerDataArrayList.add(0, new RecyclerDataMain(messagePhoneNumber, color, message, convertDate(messageTime,"hh:mm"), null));
                             adapter.notifyYourItemInserted(0);
                             adapter.notifyYourItemRemoved(i + 1);
                             adapter.notifyYourDataSetChanged(recyclerDataArrayList);
@@ -370,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                     messageTime = (c.getString(c.getColumnIndexOrThrow("date")));
-                    date.add(messageTime);
+                    date.add(convertDate(messageTime,"hh:mm"));
 /*
 
  */
