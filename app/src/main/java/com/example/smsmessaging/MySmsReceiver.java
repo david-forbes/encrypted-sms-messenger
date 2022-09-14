@@ -38,6 +38,10 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.example.android.smsmessaging.R;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.security.PublicKey;
+import java.security.spec.X509EncodedKeySpec;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -174,11 +178,28 @@ public class MySmsReceiver extends BroadcastReceiver {
                 if (message.substring(0, 3).equals("***")) {
                     SharedPreferences sharedPref1 = MyApplication.getAppContext().getSharedPreferences(
                             "public_key", Context.MODE_PRIVATE);
+                    PublicKey publicKey = EncryptionHelper.GetPublicKeyFromBase64(message.substring(3));
                     sharedPref1.edit().putString(keys[i].toString().replaceAll("[^\\d.]", ""), message.substring(3)).apply();
 
 
-                    Toast.makeText(MyApplication.getAppContext(), "new encryption key added", Toast.LENGTH_SHORT).show();
+                    File directory = MyApplication.getAppContext().getDir(MyApplication.getAppContext().getFilesDir().getName(), Context.MODE_PRIVATE);
+
+                    File file = new File(directory, keys[i].toString()+".key");
+                    try {
+                        FileOutputStream fosPublic = new FileOutputStream(file, false);
+                        X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(publicKey.getEncoded());
+                        fosPublic.write(publicKey.getEncoded());
+                        fosPublic.close();
+                        Toast.makeText(MyApplication.getAppContext(), "new encryption key added", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "onReceive: "+keys[i].toString()+publicKey);
+                    }catch(Exception e){
+                        Toast.makeText(MyApplication.getAppContext(),"Public Key was not saved",Toast.LENGTH_SHORT);
+                    }
+
                 } else if (message.substring(0, 2).equals("**")) {
+                    String encryptedMessage = message.substring(2);
+                    String decryptedMessage = EncryptionHelper.DecryptFromBase64ToString(encryptedMessage);
+                    message = decryptedMessage;
 
                 }
 

@@ -1,5 +1,7 @@
 package com.example.smsmessaging;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.util.Log;
@@ -47,6 +49,34 @@ public class EncryptionHelper {
         }
 
     }
+    public static PublicKey GetKey(String file) {
+
+        try {
+            ContextWrapper contextWrapper = new ContextWrapper(MyApplication.getAppContext());
+            File directory = contextWrapper.getDir(MyApplication.getAppContext().getFilesDir().getName(), Context.MODE_PRIVATE);
+
+            File publicKeyFile = new File(directory, file);
+
+            byte[] publicKeyBytes = Files.readAllBytes(publicKeyFile.toPath());
+
+
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+
+            X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);
+
+            PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
+
+
+            return publicKey;
+
+
+        } catch (Exception e) {
+
+            return null;
+        }
+
+    }
+
 
     public static String GetBase64PublicKey() {
         try {
@@ -121,6 +151,7 @@ public class EncryptionHelper {
     }
     public static String EncryptFromStringToBase64(PublicKey publicKey, String message){
         byte[] encryptedMessage = EncryptFromString(publicKey, message);
+        Log.d(TAG, "EncryptFromStringToBase64: "+new String(encryptedMessage,StandardCharsets.UTF_8));
 
         byte[] base64EncryptedMessage =  Base64.getEncoder().encode(encryptedMessage);
         return new String(base64EncryptedMessage, StandardCharsets.UTF_8);
@@ -148,6 +179,7 @@ public class EncryptionHelper {
 
     public static byte[] EncryptFromString(PublicKey publicKey, String message) {
         byte[] encrypted = encrypt(publicKey, message.getBytes(StandardCharsets.UTF_8));
+        Log.d(TAG, "EncryptFromString: "+encrypted);
         return encrypted;
     }
 

@@ -468,17 +468,13 @@ public class ConversationActivity extends AppCompatActivity {
                     String pubKey = sharedPref.getString(phoneString+"PUBLICKEY","");
 
  */
-            SharedPreferences sharedPref = MyApplication.getAppContext().getSharedPreferences(
-                    "public_key", MODE_PRIVATE);
-            /*
-            String pubKey = sharedPref.getString(phoneString, "");
-            if (pubKey.isEmpty()) {
+            PublicKey phoneNumberPublicKey = EncryptionHelper.GetKey(destinationAddress+".key");
+            if(phoneNumberPublicKey==null){
                 Toast.makeText(this, "No saved encryption key for this number", Toast.LENGTH_SHORT).show();
                 return;
 
             }
 
-             */
             PublicKey standInPubKey = EncryptionHelper.GetPublicKey();
             String messageString = EncryptionHelper.EncryptFromStringToBase64(standInPubKey, smsMessage);
             Log.d(TAG, "smsSendMessage: "+EncryptionHelper.DecryptFromBase64ToString(messageString));
@@ -489,7 +485,7 @@ public class ConversationActivity extends AppCompatActivity {
 
 
 
-            SmsSplit(destinationAddress, messageString);
+            SmsSplit(destinationAddress, "**"+messageString);
         } else {
             SmsSplit(destinationAddress, smsMessage);
         }
