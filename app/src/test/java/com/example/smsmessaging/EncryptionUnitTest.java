@@ -5,11 +5,13 @@ import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class EncryptionUnitTest {
+
     @Test
 
     public void encrypt_decrypt() {

@@ -67,16 +67,14 @@ public class MySmsReceiver extends BroadcastReceiver {
     public List<String> phoneNumber;
 
     public void createNotificationChannel(Context context) {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = context.getString(R.string.channel_name);
             String description = context.getString(R.string.channel_description);
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
+
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
@@ -90,48 +88,11 @@ public class MySmsReceiver extends BroadcastReceiver {
      */
     @TargetApi(Build.VERSION_CODES.M)
     @Override
-    /*
-    public void onReceive(Context context, Intent intent) {
-        Bundle intentExtras = intent.getExtras();
-        if (intentExtras != null) {
-            Object[] sms = (Object[]) intentExtras.get;
-            ContentResolver contentResolver = context.getContentResolver();
-            String smsMessageStr = "";
-            for (int i = 0; i < sms.length; ++i) {
-                SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) sms[i]);
 
-                String smsBody = smsMessage.getMessageBody().toString();
-                String address = smsMessage.getOriginatingAddress();
-
-                smsMessageStr += "SMS From: " + address + "\n";
-                smsMessageStr += smsBody + "\n";
-
-                /*creating the content values to pass to inbox
-                ContentValues values = new ContentValues();
-                values.put("address",address);
-                values.put("body",smsBody);
-
-                Uri uriSMSURI = Uri.parse("content://sms/inbox");
-                //contentResolver.insert(uriSMSURI, values);
-
-                /*push to inbo
-                context.getContentResolver().insert(uriSMSURI,values);
-
-            }
-            Toast.makeText(context, smsMessageStr, Toast.LENGTH_SHORT).show();
-        }
-    }}
-*/
     public void onReceive(Context context, Intent intent) {
 
 
-/*
-        ContentValues values = new ContentValues();
-        values.put("address", number);
-        values.put("body", message);
-        values.put("read", readState);
-        values.put("date", dateTime);
-        mActivity.getContentResolver().insert(Uri.parse("content://sms/sent"), values);*/
+
 
         ContentResolver contentResolver = context.getContentResolver();
 
@@ -215,8 +176,7 @@ public class MySmsReceiver extends BroadcastReceiver {
                 String currentTime = Long.toString(java.lang.System.currentTimeMillis());
 
 
-                //SimpleDateFormat sdf = new SimpleDateFormat("YY/MM/ddHH:mm:ss");
-                //String currentTime = sdf.format(new Date());
+
 
                 values.put("date", currentTime);
 
@@ -246,13 +206,13 @@ public class MySmsReceiver extends BroadcastReceiver {
                 createNotificationChannel(context);
                 NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
                 int notificationId = 2134;
-// notificationId is a unique int for each notification that you must define
+
                 notificationManager.notify(notificationId, builder.build());
 
 
-                // Log and display the SMS message.
+
                 Log.d(TAG, "onReceive: " + strMessage);
-                //Toast.makeText(context, strMessage, Toast.LENGTH_LONG).show();
+                
                 Intent intent2 = new Intent();
                 intent2.setAction("newsms");
                 intent2.putExtra("phoneNumber", keys[i].toString().replaceAll("[^\\d.]", ""));

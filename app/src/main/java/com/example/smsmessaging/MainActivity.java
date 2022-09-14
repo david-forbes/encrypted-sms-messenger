@@ -45,13 +45,12 @@ public class MainActivity extends AppCompatActivity {
     public BroadcastReceiver myReceiver;
     private RecyclerView recyclerView;
     public ArrayList<RecyclerDataMain> recyclerDataArrayList;
-    public List<Sms> textMessageList;
+
     public ArrayList<String> messages;
     public ArrayList<String> date;
     public ArrayList<String> time;
     public Thread thread;
-    public String datef;
-    private String cdate;
+
     public SearchView searchView;
     public String messageTime;
     public int requestCode;
@@ -75,12 +74,7 @@ public class MainActivity extends AppCompatActivity {
         date = new ArrayList<>();
         time = new ArrayList<>();
         color = (ContextCompat.getColor(this, R.color.white));
-        /*
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd");
-        datef = sdf.format(new Date());
 
-
-         */
         RecyclerViewAdapterMain adapter = new RecyclerViewAdapterMain(recyclerDataArrayList, this);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(layoutManager);
@@ -105,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         adapter.notifyYourDataSetChanged(recyclerDataArrayList);
 
-                        // Stuff that updates the UI
+
 
                     }
                 });
@@ -114,16 +108,16 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG, recyclerDataArrayList.toString());
         if (isDefaultSmsApp(getBaseContext())) {
-            //Toast.makeText(this, "h", Toast.LENGTH_SHORT).show();
+
             thread.start();
 
         } else {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
                 RoleManager roleManager = getBaseContext().getSystemService(RoleManager.class);
-                // check if the app is having permission to be as default SMS app
+
                 boolean isRoleAvailable = roleManager.isRoleAvailable(RoleManager.ROLE_SMS);
                 if (isRoleAvailable) {
-                    // check whether your app is already holding the default SMS app role.
+
                     boolean isRoleHeld = roleManager.isRoleHeld(RoleManager.ROLE_SMS);
                     if (!isRoleHeld) {
                         Intent roleRequestIntent = roleManager.createRequestRoleIntent(RoleManager.ROLE_SMS);
@@ -165,11 +159,11 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         adapter.notifyYourItemRemoved(position);
                         Uri uriSMSURI = Uri.parse("content://sms/");
-                        String[] projection = null;
+
                         String selectionClause = "address = ?";
-                        String sortOrder = null;
+
                         String[] selectionArgs = {recyclerDataArrayList.get(position).getTitle()};
-                        ContentResolver contentResolver = getBaseContext().getContentResolver();
+
                         getBaseContext().getContentResolver().delete(uriSMSURI, selectionClause, selectionArgs);
                         recyclerDataArrayList.remove(position);
                         dialog.cancel();
@@ -195,18 +189,11 @@ public class MainActivity extends AppCompatActivity {
         myReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                //Toast.makeText(context,"receeevd",Toast.LENGTH_SHORT).show();
+
                 String messagePhoneNumber = intent.getStringExtra("phoneNumber");
                 String message = intent.getStringExtra("message");
                 String messageTime = intent.getStringExtra("date");
-                /*
-                if (cdate.contains(datef)) {
-                    cdate = (cdate.substring(8, 13));
-                } else {
-                    cdate = (cdate.substring(3, 8));
-                }
 
-                 */
 
 
                 if (!phoneNumbers.contains(messagePhoneNumber.replaceAll("[^\\d.]", ""))) {
@@ -215,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
                     adapter.notifyYourItemInserted(0);
                     adapter.notifyYourDataSetChanged(recyclerDataArrayList);
                     recyclerView.scrollToPosition(0);
-                    //Toast.makeText(context,"howaya",Toast.LENGTH_SHORT).show();
+
 
                 } else {
                     for (int i = 0; i < recyclerDataArrayList.size(); i++) {
@@ -226,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
                             adapter.notifyYourItemRemoved(i + 1);
                             adapter.notifyYourDataSetChanged(recyclerDataArrayList);
                             recyclerView.scrollToPosition(0);
-                            //Toast.makeText(context, message+"howaya", Toast.LENGTH_SHORT).show();
+
                             break;
                         }
                     }
@@ -252,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
 
-                //adapter.filter(query);
+
                 return true;
             }
 
@@ -274,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_settings:
                 goSettingMain();
-                // User chose the "Settings" item, show the app settings UI...
+
                 return true;
             case R.id.show_search:
                 if (searchView.getVisibility() == View.GONE) {
@@ -283,12 +270,7 @@ public class MainActivity extends AppCompatActivity {
                     searchView.setVisibility(View.GONE);
                 }
 
-            /*case R.id.action_favorite:
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
-                return true;
 
-             */
 
             default:
 
@@ -364,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
     public List<String> getNumbers() {
 
 
-        //String phoneString = "6505551212";
+
 
         String TAG = "ThirdActivity";
         List<String> phoneNumbers = new ArrayList<String>();
@@ -374,31 +356,22 @@ public class MainActivity extends AppCompatActivity {
 
         Cursor c = cr.query(message, null, null, null, null);
         this.startManagingCursor(c);
-        //int totalSMS = c.getCount();
+
 
         if (c.moveToFirst()) {
             c.moveToPrevious();
 
-            //for (int i = 0; i < totalSMS; i++) {
+
             while ((c.moveToNext())) {
                 if (!phoneNumbers.contains(c.getString(c.getColumnIndexOrThrow("address")).replaceAll("[^\\d.]", ""))) {
 
 
                     messages.add(c.getString(c.getColumnIndexOrThrow("body")));
 
-                    //date.add(c.getString(c.getColumnIndexOrThrow("date")));
-                    /*
-                    cdate = (c.getString(c.getColumnIndexOrThrow("date")));
 
-*/
                     messageTime = (c.getString(c.getColumnIndexOrThrow("date")));
                     date.add(messageTime);
 /*
-                    if (cdate.contains(datef)) {
-                        time.add(cdate.substring(8, 13));
-                    } else {
-                        time.add(cdate.substring(3, 8));
-                    }
 
  */
 
@@ -407,30 +380,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-        // else {
-        // throw new RuntimeException("You have no SMS");
-        // }
+
         c.close();
 
         return phoneNumbers;
     }
 
-    public void smsOpenMessage(View v) {
-
-
-        String openPhoneNumber = searchView.getQuery().toString().replaceAll("[^\\d.]", "");
-        if (openPhoneNumber.length() < 7) {
-            Toast.makeText(getBaseContext(), "Phone number too short", Toast.LENGTH_SHORT).show();
-        } else {
-            Intent intent = new Intent(v.getContext(), ConversationActivity.class);
-            intent.putExtra("phoneNumber", openPhoneNumber);
-            startActivity(intent);
-        }
 
     }
 
 
-}
 
 
 
