@@ -13,7 +13,7 @@ import android.provider.Telephony.Mms;
 import android.util.Log;
 import android.widget.Toast;
 
-
+/*
 /**
  * MmsSystemEventReceiver receives the
  * and performs a series of operations which may include:

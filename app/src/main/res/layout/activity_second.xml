@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorPrimary"
-    tools:context="com.example.smsmessaging.SecondActivity">
+    tools:context="com.example.smsmessaging.ConversationActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/my_toolbar2"
@@ -52,7 +52,9 @@
         android:layout_alignParentBottom="true"
         android:windowSoftInputMode="adjustResize"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="16dp">
+        tools:layout_editor_absoluteX="16dp"
+        android:elevation="4dp"
+        android:background="@color/graye">
 
         <EditText
 

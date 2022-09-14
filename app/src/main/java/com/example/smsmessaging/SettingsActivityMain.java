@@ -79,7 +79,7 @@ public class SettingsActivityMain extends AppCompatActivity {
     public void GenKeypair() {
         try {
             KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-            generator.initialize(1024);
+            generator.initialize(2048);
             KeyPair pair = generator.generateKeyPair();
             privateKey = pair.getPrivate();
             publicKey = pair.getPublic();

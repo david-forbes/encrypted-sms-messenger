@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Try2sms</string>
+    <string name="app_name">EncryptSMS</string>
     <string name="send_a_message">send a message</string>
     <string name="enter_message_here">enter message here</string>
     <string name="retry">retry</string>

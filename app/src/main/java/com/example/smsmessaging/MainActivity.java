@@ -7,21 +7,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Telephony;
-import android.telephony.TelephonyManager;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 
 import android.widget.Toast;
 
@@ -32,21 +26,15 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.android.smsmessaging.R;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import android.app.SearchManager;
-
 import androidx.appcompat.widget.SearchView;
 
-import android.widget.SearchView.OnQueryTextListener;
-
 import androidx.appcompat.widget.Toolbar;
-import androidx.appcompat.app.AppCompatActivity;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -65,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     public String datef;
     private String cdate;
     public SearchView searchView;
+    public String messageTime;
     public int requestCode;
 
 
@@ -86,9 +75,12 @@ public class MainActivity extends AppCompatActivity {
         date = new ArrayList<>();
         time = new ArrayList<>();
         color = (ContextCompat.getColor(this, R.color.white));
+        /*
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd");
         datef = sdf.format(new Date());
 
+
+         */
         RecyclerViewAdapterMain adapter = new RecyclerViewAdapterMain(recyclerDataArrayList, this);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(layoutManager);
@@ -156,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.d(TAG, "Button clicked");
                 phoneNumber = recyclerDataArrayList.get(position).getTitle();
-                Intent intent = new Intent(v.getContext(), com.example.smsmessaging.SecondActivity.class);
+                Intent intent = new Intent(v.getContext(), ConversationActivity.class);
                 intent.putExtra("phoneNumber", phoneNumber);
                 startActivity(intent);
 
@@ -206,18 +198,20 @@ public class MainActivity extends AppCompatActivity {
                 //Toast.makeText(context,"receeevd",Toast.LENGTH_SHORT).show();
                 String messagePhoneNumber = intent.getStringExtra("phoneNumber");
                 String message = intent.getStringExtra("message");
-                cdate = intent.getStringExtra("date");
-
+                String messageTime = intent.getStringExtra("date");
+                /*
                 if (cdate.contains(datef)) {
                     cdate = (cdate.substring(8, 13));
                 } else {
                     cdate = (cdate.substring(3, 8));
                 }
 
+                 */
+
 
                 if (!phoneNumbers.contains(messagePhoneNumber.replaceAll("[^\\d.]", ""))) {
                     phoneNumbers.add(messagePhoneNumber.replaceAll("[^\\d.]", ""));
-                    recyclerDataArrayList.add(0, new RecyclerDataMain(messagePhoneNumber.replaceAll("[^\\d.]", ""), color, message, cdate, null));
+                    recyclerDataArrayList.add(0, new RecyclerDataMain(messagePhoneNumber.replaceAll("[^\\d.]", ""), color, message, messageTime, null));
                     adapter.notifyYourItemInserted(0);
                     adapter.notifyYourDataSetChanged(recyclerDataArrayList);
                     recyclerView.scrollToPosition(0);
@@ -227,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
                     for (int i = 0; i < recyclerDataArrayList.size(); i++) {
                         if (recyclerDataArrayList.get(i).getTitle().equals(messagePhoneNumber)) {
                             recyclerDataArrayList.remove(i);
-                            recyclerDataArrayList.add(0, new RecyclerDataMain(messagePhoneNumber, color, message, cdate, null));
+                            recyclerDataArrayList.add(0, new RecyclerDataMain(messagePhoneNumber, color, message, messageTime, null));
                             adapter.notifyYourItemInserted(0);
                             adapter.notifyYourItemRemoved(i + 1);
                             adapter.notifyYourDataSetChanged(recyclerDataArrayList);
@@ -252,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
                 if (openPhoneNumber.length() < 7) {
                     Toast.makeText(getBaseContext(), "Phone number too short", Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent intent = new Intent(getBaseContext(), com.example.smsmessaging.SecondActivity.class);
+                    Intent intent = new Intent(getBaseContext(), ConversationActivity.class);
                     intent.putExtra("phoneNumber", openPhoneNumber);
                     startActivity(intent);
                 }
@@ -297,8 +291,7 @@ public class MainActivity extends AppCompatActivity {
              */
 
             default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
+
                 return super.onOptionsItemSelected(item);
 
         }
@@ -394,13 +387,18 @@ public class MainActivity extends AppCompatActivity {
                     messages.add(c.getString(c.getColumnIndexOrThrow("body")));
 
                     date.add(c.getString(c.getColumnIndexOrThrow("date")));
+                    /*
                     cdate = (c.getString(c.getColumnIndexOrThrow("date")));
-
+*/
+                    messageTime = (c.getString(c.getColumnIndexOrThrow("date")));
+/*
                     if (cdate.contains(datef)) {
                         time.add(cdate.substring(8, 13));
                     } else {
                         time.add(cdate.substring(3, 8));
                     }
+
+ */
 
 
                     phoneNumbers.add(c.getString(c.getColumnIndexOrThrow("address")).replaceAll("[^\\d.]", ""));
@@ -422,7 +420,7 @@ public class MainActivity extends AppCompatActivity {
         if (openPhoneNumber.length() < 7) {
             Toast.makeText(getBaseContext(), "Phone number too short", Toast.LENGTH_SHORT).show();
         } else {
-            Intent intent = new Intent(v.getContext(), com.example.smsmessaging.SecondActivity.class);
+            Intent intent = new Intent(v.getContext(), ConversationActivity.class);
             intent.putExtra("phoneNumber", openPhoneNumber);
             startActivity(intent);
         }

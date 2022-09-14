@@ -30,6 +30,7 @@ public class EncryptionHelper {
 
             byte[] publicKeyBytes = Files.readAllBytes(publicKeyFile.toPath());
 
+
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 
             X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);

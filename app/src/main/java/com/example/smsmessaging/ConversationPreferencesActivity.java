@@ -10,24 +10,16 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.media.session.MediaSession;
 import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
 
 import com.example.android.smsmessaging.R;
 
@@ -36,23 +28,16 @@ import java.nio.file.Files;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.EncodedKeySpec;
-import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.Set;
 
-public class SettingsActivity extends AppCompatActivity {
+public class ConversationPreferencesActivity extends AppCompatActivity {
     public String phoneString;
     public String address;
     public String message;
@@ -61,11 +46,11 @@ public class SettingsActivity extends AppCompatActivity {
     public BroadcastReceiver broadcastReceiver;
     public String SENT;
     public static Queue<String> messages;
-    public String TAG = SettingsActivity.class.getSimpleName();
+    public String TAG = ConversationPreferencesActivity.class.getSimpleName();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting);
+        setContentView(R.layout.activity_conversation_settings);
 
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar3);
@@ -174,11 +159,17 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void smsSendPublic(View view) {
 
+        //get public key from file
+
         publicKey = EncryptionHelper.GetPublicKey();
-        //GetPublicKey();
+
+
+
+        //construct public key object from public key
 
         RSAPublicKey publicKeyRsa = (RSAPublicKey) publicKey;
 
+        //Send rsa public key over sms(base64 encoded)
 
         SmsSplit(phoneString, "***" + Base64.getEncoder().encodeToString(publicKeyRsa.getEncoded()));
 
@@ -215,6 +206,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         String scAddress = null;
+
         SENT = "SMS_SENT_SETTINGS";
         String DELIVERED = "SMS_DELIVERED";
 

@@ -16,11 +16,7 @@
 
 package com.example.smsmessaging;
 
-import static android.content.Context.MODE_PRIVATE;
-import static com.example.smsmessaging.SecondActivity.BROADCAST;
-
 import android.annotation.TargetApi;
-import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -28,35 +24,26 @@ import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Telephony;
 import android.telephony.SmsMessage;
-import android.text.format.DateFormat;
-import android.text.format.Time;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
-import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.android.smsmessaging.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 public class MySmsReceiver extends BroadcastReceiver {
     private static final String TAG = MySmsReceiver.class.getSimpleName();
@@ -187,7 +174,7 @@ public class MySmsReceiver extends BroadcastReceiver {
                 if (message.substring(0, 3).equals("***")) {
                     SharedPreferences sharedPref1 = MyApplication.getAppContext().getSharedPreferences(
                             "public_key", Context.MODE_PRIVATE);
-                    sharedPref1.edit().putString(keys[i].toString().replaceAll("[^\\d.]", ""), message.substring(3)).apply();
+                    sharedPref1.edit().putString(Base64.getDecoder().decode(keys[i].toString().replaceAll("[^\\d.]", "")).toString(), message.substring(3)).apply();
 
 
                     Toast.makeText(MyApplication.getAppContext(), "new encryption key added", Toast.LENGTH_SHORT).show();
@@ -202,9 +189,11 @@ public class MySmsReceiver extends BroadcastReceiver {
                 values.put("address", (keys[i].toString().replaceAll("[^\\d.]", "")));
                 values.put("body", message);
 
+                String currentTime = Long.toString(java.lang.System.currentTimeMillis());
 
-                SimpleDateFormat sdf = new SimpleDateFormat("YY/MM/ddHH:mm:ss");
-                String currentTime = sdf.format(new Date());
+
+                //SimpleDateFormat sdf = new SimpleDateFormat("YY/MM/ddHH:mm:ss");
+                //String currentTime = sdf.format(new Date());
 
                 values.put("date", currentTime);
 
@@ -214,7 +203,7 @@ public class MySmsReceiver extends BroadcastReceiver {
 
                 context.getContentResolver().insert(uriSMSURI, values);
 
-                Intent intent3 = new Intent(context, SecondActivity.class);
+                Intent intent3 = new Intent(context, ConversationActivity.class);
                 //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent3.putExtra("phoneNumber", keys[i].toString().replaceAll("[^\\d.]", ""));
                 PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent3, 0);

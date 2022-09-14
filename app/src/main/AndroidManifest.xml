@@ -27,7 +27,7 @@
 
         </activity>
 
-        <activity android:name="com.example.smsmessaging.SecondActivity" android:label="Second Activity" android:parentActivityName="com.example.smsmessaging.MainActivity">
+        <activity android:name="com.example.smsmessaging.ConversationActivity" android:label="Second Activity" android:parentActivityName="com.example.smsmessaging.MainActivity">
 
 
 
@@ -38,8 +38,8 @@
         <!--<activity android:name="com.example.smsmessaging.ThirdActivity" android:label="Third Activity" android:parentActivityName="com.example.smsmessaging.MainActivity">
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.example.smsmessaging.MainActivity"/>
         </activity>-->
-        <activity android:name="com.example.smsmessaging.SettingsActivity">
-            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.example.smsmessaging.SecondActivity"/>
+        <activity android:name="com.example.smsmessaging.ConversationPreferencesActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.example.smsmessaging.ConversationActivity"/>
         </activity>
         <activity android:name="com.example.smsmessaging.SettingsActivityMain" android:exported="true">
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.example.smsmessaging.MainActivity"/>

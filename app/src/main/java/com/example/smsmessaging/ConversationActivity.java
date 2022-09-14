@@ -1,7 +1,5 @@
 package com.example.smsmessaging;
 
-import static com.google.android.material.internal.ContextUtils.getActivity;
-
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,42 +24,30 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.provider.Telephony;
-import android.provider.UserDictionary;
-import android.service.carrier.MessagePdu;
 import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 
 import androidx.appcompat.widget.SwitchCompat;
 
-import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
-import androidx.appcompat.app.AppCompatActivity;
 
 
 import com.example.android.smsmessaging.R;
 
-import java.nio.charset.StandardCharsets;
-import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.spec.X509EncodedKeySpec;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -70,7 +56,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-public class SecondActivity extends AppCompatActivity {
+public class ConversationActivity extends AppCompatActivity {
     public RecyclerView recyclerView;
     private ArrayList<RecyclerData> recyclerDataArrayList;
     public int MY_PERMISSIONS_REQUEST_SEND_SMS;
@@ -178,7 +164,7 @@ public class SecondActivity extends AppCompatActivity {
             @Override
             public void onItemLongClick(int position, View v) {
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(SecondActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(ConversationActivity.this);
                 builder.setMessage("Delete Message?");
                 builder.setCancelable(true);
 
@@ -361,7 +347,7 @@ public class SecondActivity extends AppCompatActivity {
         editor.apply();
 
 
-        Intent intent4 = new Intent(getBaseContext(), com.example.smsmessaging.SettingsActivity.class);
+        Intent intent4 = new Intent(getBaseContext(), ConversationPreferencesActivity.class);
         intent4.putExtra("phoneString", phoneString);
         startActivity(intent4);
     }
