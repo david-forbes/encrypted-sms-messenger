@@ -7,9 +7,12 @@ import android.content.ContextWrapper;
 import android.util.Log;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.EncodedKeySpec;
@@ -20,6 +23,35 @@ import java.util.Base64;
 import javax.crypto.Cipher;
 
 public class EncryptionHelper {
+
+    public static void GenKeypair() {
+        try {
+            KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
+            generator.initialize(2048);
+            KeyPair pair = generator.generateKeyPair();
+            PrivateKey privateKey = pair.getPrivate();
+            PublicKey publicKey = pair.getPublic();
+
+
+            File directory = MyApplication.getAppContext().getDir(MyApplication.getAppContext().getFilesDir().getName(), Context.MODE_PRIVATE);
+
+            File file = new File(directory, "public.key");
+            FileOutputStream fosPublic = new FileOutputStream(file, false);
+            X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(publicKey.getEncoded());
+            fosPublic.write(publicKey.getEncoded());
+            fosPublic.close();
+
+            File file2 = new File(directory, "private.key");
+            FileOutputStream fosPrivate = new FileOutputStream(file2, false);
+            PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(privateKey.getEncoded());
+            fosPrivate.write(privateKey.getEncoded());
+            fosPrivate.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+    }
 
 
     public static PublicKey GetPublicKey() {
@@ -49,6 +81,7 @@ public class EncryptionHelper {
         }
 
     }
+
     public static PublicKey GetKey(String file) {
 
         try {
@@ -79,25 +112,23 @@ public class EncryptionHelper {
 
 
     public static String GetBase64PublicKey() {
-        try {
-            ContextWrapper contextWrapper = new ContextWrapper(MyApplication.getAppContext());
-            File directory = contextWrapper.getDir(MyApplication.getAppContext().getFilesDir().getName(), Context.MODE_PRIVATE);
+        PublicKey publicKey = GetPublicKey();
 
-            File publicKeyFile = new File(directory, "public.key");
-
-            byte[] publicKeyBytes = Files.readAllBytes(publicKeyFile.toPath());
-
-            String publicKey = new String(Base64.getEncoder().encode(publicKeyBytes), StandardCharsets.UTF_8);
+        String publicKeyBase64 = GetBase64FromPublicKey(publicKey);
 
 
-            return publicKey;
+        return publicKeyBase64;
 
 
-        } catch (Exception e) {
+    }
 
-            return null;
-        }
+    public static String GetBase64FromPublicKey(PublicKey publicKey) {
+        byte[] publicKeyBytes = publicKey.getEncoded();
 
+        String publicKeyBase64 = new String(Base64.getEncoder().encode(publicKeyBytes), StandardCharsets.UTF_8);
+
+
+        return publicKeyBase64;
     }
 
     public static PublicKey GetPublicKeyFromBase64(String publicKeyBase64) {
@@ -149,25 +180,22 @@ public class EncryptionHelper {
         }
 
     }
-    public static String EncryptFromStringToBase64(PublicKey publicKey, String message){
-        byte[] encryptedMessage = EncryptFromString(publicKey, message);
-        Log.d(TAG, "EncryptFromStringToBase64: "+new String(encryptedMessage,StandardCharsets.UTF_8));
 
-        byte[] base64EncryptedMessage =  Base64.getEncoder().encode(encryptedMessage);
+    public static String EncryptFromStringToBase64(PublicKey publicKey, String message) {
+        byte[] encryptedMessage = EncryptFromString(publicKey, message);
+        Log.d(TAG, "EncryptFromStringToBase64: " + new String(encryptedMessage, StandardCharsets.UTF_8));
+
+        byte[] base64EncryptedMessage = Base64.getEncoder().encode(encryptedMessage);
         return new String(base64EncryptedMessage, StandardCharsets.UTF_8);
 
     }
-    public static String DecryptFromBase64ToString(String message){
-        PrivateKey privateKey = GetPrivateKey();
+
+    public static String DecryptFromBase64ToString(PrivateKey privateKey, String message) {
+
         try {
             byte[] messageBytes = Base64.getDecoder().decode(message.getBytes(StandardCharsets.UTF_8));
-            String decryptedMessage = decryptToString(privateKey, messageBytes);
+            String decryptedMessage = DecryptToString(privateKey, messageBytes);
             return decryptedMessage;
-
-
-
-
-
 
 
         } catch (Exception e) {
@@ -179,7 +207,7 @@ public class EncryptionHelper {
 
     public static byte[] EncryptFromString(PublicKey publicKey, String message) {
         byte[] encrypted = encrypt(publicKey, message.getBytes(StandardCharsets.UTF_8));
-        Log.d(TAG, "EncryptFromString: "+encrypted);
+        Log.d(TAG, "EncryptFromString: " + encrypted);
         return encrypted;
     }
 
@@ -198,7 +226,7 @@ public class EncryptionHelper {
         }
     }
 
-    public static String decryptToString(PrivateKey privateKey, byte[] message) {
+    public static String DecryptToString(PrivateKey privateKey, byte[] message) {
         byte[] bytes = decrypt(privateKey, message);
         String decryptedString = new String(bytes, StandardCharsets.UTF_8);
         return decryptedString;

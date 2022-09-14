@@ -74,7 +74,7 @@ public class SettingsActivityMain extends AppCompatActivity {
             byte[] encrypted = EncryptionHelper.EncryptFromString(publicKey, "hello");
 
             Log.d(TAG, "GenKeypair: " + encrypted);
-            String decryptedString = EncryptionHelper.decryptToString(privateKey, encrypted);
+            String decryptedString = EncryptionHelper.DecryptToString(privateKey, encrypted);
 
             Log.d(TAG, "GenKeypair: " + decryptedString);
 
@@ -124,7 +124,7 @@ public class SettingsActivityMain extends AppCompatActivity {
         byte[] encrypted = EncryptionHelper.EncryptFromString(publicKey, "hello");
 
 
-        String decryptedString = EncryptionHelper.decryptToString(privateKey, encrypted);
+        String decryptedString = EncryptionHelper.DecryptToString(privateKey, encrypted);
 
         Log.d(TAG, "GetKeypair: " + decryptedString);
 

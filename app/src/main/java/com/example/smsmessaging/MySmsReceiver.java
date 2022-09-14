@@ -40,6 +40,7 @@ import com.example.android.smsmessaging.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
 import java.text.SimpleDateFormat;
@@ -198,7 +199,8 @@ public class MySmsReceiver extends BroadcastReceiver {
 
                 } else if (message.substring(0, 2).equals("**")) {
                     String encryptedMessage = message.substring(2);
-                    String decryptedMessage = EncryptionHelper.DecryptFromBase64ToString(encryptedMessage);
+                    PrivateKey privateKey = EncryptionHelper.GetPrivateKey();
+                    String decryptedMessage = EncryptionHelper.DecryptFromBase64ToString(privateKey, encryptedMessage);
                     message = decryptedMessage;
 
                 }

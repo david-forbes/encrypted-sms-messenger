@@ -477,7 +477,8 @@ public class ConversationActivity extends AppCompatActivity {
 
             PublicKey standInPubKey = EncryptionHelper.GetPublicKey();
             String messageString = EncryptionHelper.EncryptFromStringToBase64(standInPubKey, smsMessage);
-            Log.d(TAG, "smsSendMessage: "+EncryptionHelper.DecryptFromBase64ToString(messageString));
+            PrivateKey privateKey = EncryptionHelper.GetPrivateKey();
+            Log.d(TAG, "smsSendMessage: "+EncryptionHelper.DecryptFromBase64ToString(privateKey, messageString));
 
 
 
