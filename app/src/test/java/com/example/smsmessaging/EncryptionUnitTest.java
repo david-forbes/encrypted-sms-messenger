@@ -70,6 +70,11 @@ public class EncryptionUnitTest {
             return;
         }
     }
+    @Test
+    public void phone_number_sanitize() {
+        String phoneNumber = "353-382934-384723";
+        assertEquals("382934384723",EncryptionHelper.SanitizePhoneNumber(phoneNumber));
+    }
 
 
 

@@ -198,9 +198,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-                if (!phoneNumbers.contains(messagePhoneNumber.replaceAll("[^\\d.]", ""))) {
-                    phoneNumbers.add(messagePhoneNumber.replaceAll("[^\\d.]", ""));
-                    recyclerDataArrayList.add(0, new RecyclerDataMain(messagePhoneNumber.replaceAll("[^\\d.]", ""), color, message, convertDate(messageTime,"hh:mm"), null));
+                if (!phoneNumbers.contains(EncryptionHelper.SanitizePhoneNumber(messagePhoneNumber))) {
+                    phoneNumbers.add(EncryptionHelper.SanitizePhoneNumber(messagePhoneNumber));
+                    recyclerDataArrayList.add(0, new RecyclerDataMain(EncryptionHelper.SanitizePhoneNumber(messagePhoneNumber), color, message, convertDate(messageTime,"hh:mm"), null));
                     adapter.notifyYourItemInserted(0);
                     adapter.notifyYourDataSetChanged(recyclerDataArrayList);
                     recyclerView.scrollToPosition(0);
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
                     for (int i = 0; i < recyclerDataArrayList.size(); i++) {
                         if (recyclerDataArrayList.get(i).getTitle().equals(messagePhoneNumber)) {
                             recyclerDataArrayList.remove(i);
-                            recyclerDataArrayList.add(0, new RecyclerDataMain(messagePhoneNumber, color, message, convertDate(messageTime,"hh:mm"), null));
+                            recyclerDataArrayList.add(0, new RecyclerDataMain(EncryptionHelper.SanitizePhoneNumber(messagePhoneNumber), color, message, convertDate(messageTime,"hh:mm"), null));
                             adapter.notifyYourItemInserted(0);
                             adapter.notifyYourItemRemoved(i + 1);
                             adapter.notifyYourDataSetChanged(recyclerDataArrayList);
@@ -366,7 +366,9 @@ public class MainActivity extends AppCompatActivity {
 
 
             while ((c.moveToNext())) {
-                if (!phoneNumbers.contains(c.getString(c.getColumnIndexOrThrow("address")).replaceAll("[^\\d.]", ""))) {
+                String currentNumber =EncryptionHelper.SanitizePhoneNumber(c.getString(c.getColumnIndexOrThrow("address")));
+
+                if (!phoneNumbers.contains(currentNumber)) {
 
 
                     messages.add(c.getString(c.getColumnIndexOrThrow("body")));
@@ -379,7 +381,7 @@ public class MainActivity extends AppCompatActivity {
  */
 
 
-                    phoneNumbers.add(c.getString(c.getColumnIndexOrThrow("address")).replaceAll("[^\\d.]", ""));
+                    phoneNumbers.add(currentNumber);
                 }
             }
         }

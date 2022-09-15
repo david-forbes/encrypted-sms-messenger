@@ -526,7 +526,7 @@ public class ConversationActivity extends AppCompatActivity {
         PendingIntent sentPI = PendingIntent.getBroadcast(this, 0, new Intent(SENT), 0);
 
         SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage(destinationAddress.replaceAll("[^\\d.]", ""), scAddress, smsMessage,
+        smsManager.sendTextMessage(destinationAddress, scAddress, smsMessage,
                 sentPI, null);
 
 
@@ -562,7 +562,8 @@ public class ConversationActivity extends AppCompatActivity {
             //for (int i = 0; i < totalSMS; i++) {
             while ((c.moveToNext())) {
                 Log.d(TAG, "getAllSms: "+c.getString(c.getColumnIndexOrThrow("address")).replaceAll("[^\\d.]", "")+phoneString);
-                if (c.getString(c.getColumnIndexOrThrow("address")).replaceAll("[^\\d.]", "").equals(phoneString)) {
+                String messagePhoneString = EncryptionHelper.SanitizePhoneNumber(c.getString(c.getColumnIndexOrThrow("address")));
+                if (messagePhoneString.equals(phoneString)) {
 
                     Log.d(TAG, "sms found" + phoneString);
                     objSms = new Sms();

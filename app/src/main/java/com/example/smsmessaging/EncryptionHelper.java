@@ -26,9 +26,17 @@ import javax.crypto.Cipher;
 public class EncryptionHelper {
 
     public static String convertDate(String dateInMilliseconds,String dateFormat) {
+        dateInMilliseconds = dateInMilliseconds.replaceAll("[^\\d.]", "");
         return DateFormat.format(dateFormat, Long.parseLong(dateInMilliseconds)).toString();
     }
 
+    public static String SanitizePhoneNumber(String phoneNumber){
+        phoneNumber = phoneNumber.replaceAll("[^\\d.]", "");
+        if(phoneNumber.substring(0,3).equals("353")){
+            phoneNumber = phoneNumber.substring(3);
+        }
+        return phoneNumber;
+    }
     public static void GenKeypair() {
         try {
             KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
