@@ -48,14 +48,9 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.android.smsmessaging.R;
 
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -95,7 +90,7 @@ public class ConversationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_second);
+        setContentView(R.layout.activity_conversation);
         Intent intent = getIntent();
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar2);
         setSupportActionBar(myToolbar);
@@ -566,7 +561,8 @@ public class ConversationActivity extends AppCompatActivity {
 
             //for (int i = 0; i < totalSMS; i++) {
             while ((c.moveToNext())) {
-                if (c.getString(c.getColumnIndexOrThrow("address")).equals(phoneString)) {
+                Log.d(TAG, "getAllSms: "+c.getString(c.getColumnIndexOrThrow("address")).replaceAll("[^\\d.]", "")+phoneString);
+                if (c.getString(c.getColumnIndexOrThrow("address")).replaceAll("[^\\d.]", "").equals(phoneString)) {
 
                     Log.d(TAG, "sms found" + phoneString);
                     objSms = new Sms();
@@ -599,10 +595,10 @@ public class ConversationActivity extends AppCompatActivity {
         // }
         c.close();
         for (int i = 0; i < lstSms.size(); i++) {
-            Log.d(TAG, lstSms.get(i).getMsg() + "coe370");
+            Log.d(TAG, lstSms.get(i).getMsg());
         }
 
-        Log.d(TAG, lstSms + "code349");
+        Log.d(TAG, lstSms + "smsList");
         //return smsTxt;
         return lstSms;
     }

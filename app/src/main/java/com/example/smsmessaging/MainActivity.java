@@ -346,6 +346,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public List<String> getNumbers() {
+        Log.d(TAG, "getNumbers: "+"startinggetNumbers");
 
 
 
@@ -384,6 +385,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         c.close();
+        Log.d(TAG, "getNumbers: "+phoneNumbers);
 
         return phoneNumbers;
     }
